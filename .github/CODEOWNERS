@@ -1,28 +1,30 @@
 # CODEOWNERS — auto-assigns reviewers when someone opens a PR.
 #
 # Format: <path-pattern> <github-username>
-# Replace <gh-...> with the actual GitHub usernames once everyone has accounts.
+# Add Yaprak and Yasmine here once they accept their invitations
+# (replace the placeholder usernames below).
 
-# Default — anyone in the team
-*                                                      @sherwan-ali
+# Default — repo owner reviews anything else
+*                                                      @SherwanAli0
 
 # Person 1 (Sherwan): FUS + CF baseline
-/Person_1_Faithful_Baseline/                           @sherwan-ali
+/Person_1_Faithful_Baseline/                           @SherwanAli0
 
 # Person 2 (Ipek + Yaprak): independent FUS + replication investigation
-/Person_2_Faithful_FUS/                                @ipek-ucar @yaprak-sevinc
+/Person_2_Faithful_FUS/                                @ipekucr
 
 # Person 3 (Yasmine): PF + GIM reference baselines
-/Person_3_Reference_Baselines/                         @yasmine-guidoum
+# (assignee TBD once Yasmine accepts her invitation)
+/Person_3_Reference_Baselines/                         @SherwanAli0
 
-# Shared contract changes need everyone
-/shared_contract.md                                    @sherwan-ali @ipek-ucar @yaprak-sevinc @yasmine-guidoum
+# Shared contract changes need everyone (currently @SherwanAli0 + @ipekucr)
+/shared_contract.md                                    @SherwanAli0 @ipekucr
 
 # Top-level docs
-/README.md                                             @sherwan-ali @ipek-ucar
-/CONTRIBUTING.md                                       @sherwan-ali
-/LICENSE                                               @sherwan-ali
+/README.md                                             @SherwanAli0 @ipekucr
+/CONTRIBUTING.md                                       @SherwanAli0
+/LICENSE                                               @SherwanAli0
 
 # CI / test infrastructure
-/.github/                                              @sherwan-ali
-/tests/                                                @sherwan-ali @ipek-ucar
+/.github/                                              @SherwanAli0
+/tests/                                                @SherwanAli0 @ipekucr
