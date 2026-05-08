@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Question about the paper itself
+    url: https://ieeexplore.ieee.org/document/11358877
+    about: For questions about the original paper (not this replication), please contact the paper authors directly.
+  - name: MovieLens dataset issues
+    url: https://grouplens.org/datasets/movielens/
+    about: For dataset-specific questions, contact GroupLens.

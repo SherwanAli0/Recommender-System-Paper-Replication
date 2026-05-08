@@ -1,0 +1,43 @@
+cff-version: 1.2.0
+title: "Faithful Replication of FUS (D'Aniello et al., IEEE Access 2026)"
+message: "If you use this software, please cite both the original paper and this replication."
+type: software
+authors:
+  - family-names: Ali
+    given-names: Sherwan
+    affiliation: "University course project, 2026"
+  - family-names: Ucar
+    given-names: Ipek
+    affiliation: "University course project, 2026"
+  - family-names: Sevinc Aldogan
+    given-names: Yaprak
+    affiliation: "University course project, 2026"
+  - family-names: Guidoum
+    given-names: Yasmine
+    affiliation: "University course project, 2026"
+license: MIT
+date-released: 2026-05-08
+keywords:
+  - recommender systems
+  - fuzzy signature
+  - collaborative filtering
+  - replication study
+  - MovieLens
+references:
+  - type: article
+    title: "A Recommendation System Based on Fuzzy Signature"
+    authors:
+      - family-names: D'Aniello
+        given-names: Giuseppe
+      - family-names: Della Corte
+        given-names: Mario
+      - family-names: Gaeta
+        given-names: Matteo
+    journal: "IEEE Access"
+    volume: 14
+    start: 9975
+    end: 9985
+    year: 2026
+    publisher:
+      name: "IEEE"
+    doi: "10.1109/ACCESS.2026.3656087"

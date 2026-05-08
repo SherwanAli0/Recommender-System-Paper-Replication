@@ -1,0 +1,28 @@
+# CODEOWNERS — auto-assigns reviewers when someone opens a PR.
+#
+# Format: <path-pattern> <github-username>
+# Replace <gh-...> with the actual GitHub usernames once everyone has accounts.
+
+# Default — anyone in the team
+*                                                      @sherwan-ali
+
+# Person 1 (Sherwan): FUS + CF baseline
+/Person_1_Faithful_Baseline/                           @sherwan-ali
+
+# Person 2 (Ipek + Yaprak): independent FUS + replication investigation
+/Person_2_Faithful_FUS/                                @ipek-ucar @yaprak-sevinc
+
+# Person 3 (Yasmine): PF + GIM reference baselines
+/Person_3_Reference_Baselines/                         @yasmine-guidoum
+
+# Shared contract changes need everyone
+/shared_contract.md                                    @sherwan-ali @ipek-ucar @yaprak-sevinc @yasmine-guidoum
+
+# Top-level docs
+/README.md                                             @sherwan-ali @ipek-ucar
+/CONTRIBUTING.md                                       @sherwan-ali
+/LICENSE                                               @sherwan-ali
+
+# CI / test infrastructure
+/.github/                                              @sherwan-ali
+/tests/                                                @sherwan-ali @ipek-ucar
