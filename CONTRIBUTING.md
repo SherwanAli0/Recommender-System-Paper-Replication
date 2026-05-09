@@ -4,7 +4,7 @@ Thanks for your interest in this paper-replication repository. This is a course-
 
 ## Ground rules
 
-1. **Faithfulness to the paper is paramount.** Production code under `Person_*/code/` must implement only what the paper specifies. Hypotheses, tweaks, and "what if" experiments belong in `Person_*/past_tests/code/`.
+1. **Faithfulness to the paper is paramount.** Production code under `the per-stream/code/` must implement only what the paper specifies. Hypotheses, tweaks, and "what if" experiments belong in `the per-stream/past_tests/code/`.
 2. **Coverage Rate is the algorithm-correctness check.** Any change that breaks `CR ≈ 0.6007 at k=1` for FUS is a regression and will be rejected.
 3. **No-original-code rule.** Every algorithmic block must cite a public source (a GitHub URL, a Stack Overflow URL, the paper's equation number, or library docs). See `shared_contract.md` §8.
 

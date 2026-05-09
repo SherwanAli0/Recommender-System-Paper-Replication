@@ -24,7 +24,7 @@ assignees: ''
 
 ## Have you checked existing investigation?
 
-- [ ] I read `Person_2_Faithful_FUS/REPRO_DEBUG_NOTES.md`
+- [ ] I read `cross_check/REPRO_DEBUG_NOTES.md`
 - [ ] I checked the `past_tests/` folders for prior hypothesis tests
 - [ ] My question is genuinely new, not already addressed by the 51 hypotheses listed in those documents
 

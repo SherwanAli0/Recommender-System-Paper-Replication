@@ -1,28 +1,27 @@
-# CODEOWNERS — auto-assigns reviewers when someone opens a PR.
+# CODEOWNERS: auto-assigns reviewers when someone opens a PR.
 #
 # Format: <path-pattern> <github-username>
-# Add Yaprak and Yasmine here once they accept their invitations
-# (replace the placeholder usernames below).
+# Update assignees as additional teammates accept their repository invitations.
 
-# Default — repo owner reviews anything else
+# Default: repo owner reviews anything else
 *                                                      @SherwanAli0
 
-# Person 1 (Sherwan): FUS + CF baseline
-/Person_1_Faithful_Baseline/                           @SherwanAli0
+# core: FUS implementation and CF baseline
+/core/                                                 @SherwanAli0
 
-# Person 2 (Ipek + Yaprak): independent FUS + replication investigation
-/Person_2_Faithful_FUS/                                @ipekucr
+# cross_check: independent FUS implementation
+/cross_check/                                          @ipekucr
 
-# Person 3 (Yasmine): PF + GIM reference baselines
-# (assignee TBD once Yasmine accepts her invitation)
-/Person_3_Reference_Baselines/                         @SherwanAli0
+# baselines: PF and GIM reference baselines
+/baselines/                                            @SherwanAli0
 
-# Shared contract changes need everyone (currently @SherwanAli0 + @ipekucr)
+# Shared contract changes need broader review
 /shared_contract.md                                    @SherwanAli0 @ipekucr
 
 # Top-level docs
 /README.md                                             @SherwanAli0 @ipekucr
 /CONTRIBUTING.md                                       @SherwanAli0
+/CONTRIBUTORS.md                                       @SherwanAli0 @ipekucr
 /LICENSE                                               @SherwanAli0
 
 # CI / test infrastructure

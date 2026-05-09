@@ -27,14 +27,14 @@
 
 ## Faithfulness check (paper-faithful releases only)
 
-- [ ] No production code under `Person_*/code/` was modified to change algorithm semantics, OR the change is justified by a specific paper section/equation cited in the PR.
+- [ ] No production code under `core/code/`, `cross_check/code/`, or `baselines/code/` was modified to change algorithm semantics, OR the change is justified by a specific paper section or equation cited in the PR.
 - [ ] The CR-at-k=1 sanity check still produces ~0.6007 (`python -m pytest tests/test_sanity.py::test_fus_cr_at_k1_matches_paper`).
 - [ ] No novelty (genre-hybrid, cold-start, lambda schedules) was introduced into the production tree.
 
 ## Tested
 
 - [ ] All 12 tests pass (`python run_all.py --tests` or `make tests`)
-- [ ] Manually ran the affected stream end-to-end (`python run_all.py --only person<N>`)
+- [ ] Manually ran the affected stream end-to-end (`python run_all.py --only <stream>`)
 - [ ] Verified output CSVs match expected pass-bands
 
 ## Reviewer checklist

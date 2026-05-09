@@ -18,7 +18,7 @@ That said, if you discover a security-relevant issue (for example: a path-traver
 
 The following are not considered security issues for this project:
 
-- Numerical differences between our results and the paper (these are documented in `Person_2_Faithful_FUS/REPRO_DEBUG_NOTES.md`)
+- Numerical differences between our results and the paper (these are documented in `cross_check/REPRO_DEBUG_NOTES.md`)
 - Performance issues (slow runs)
 - Compatibility issues with very old or very new Python versions outside the supported range
 - Use of permissive licenses (MIT / CC-BY 4.0) that allow commercial reuse

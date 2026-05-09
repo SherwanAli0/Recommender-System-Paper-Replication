@@ -1,4 +1,4 @@
-# Core scientific stack — pinned to versions verified to reproduce the paper-faithful
+# Core scientific stack - pinned to versions verified to reproduce the paper-faithful
 # numbers in this repository on Python 3.10, 3.11, 3.12 and 3.13. Newer minor versions
 # of these libraries should also work, but are not formally tested.
 numpy>=1.24,<3.0

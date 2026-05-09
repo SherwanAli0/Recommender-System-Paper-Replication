@@ -1,14 +1,14 @@
 """
 run_all.py - cross-platform single-command reproduction.
 
-For users without GNU Make (typically Windows). Runs Person 2 first (independent
-FUS, used for the cross-check), then Person 3 (PF and GIM), then Person 1
-(CF baseline + figures, which reuses Person 2's FUS CSV).
+For users without GNU Make (typically Windows). Runs the cross-check FUS first,
+then the reference baselines, then the core FUS + CF implementation (which
+reuses the cross-check FUS CSV for figures).
 
 Usage:
     python run_all.py
-    python run_all.py --skip person1
-    python run_all.py --only person2
+    python run_all.py --skip core
+    python run_all.py --only cross_check
     python run_all.py --tests
 """
 from __future__ import annotations
@@ -25,9 +25,9 @@ ML100K = ROOT.parent / "ml-100k"
 
 
 STREAMS = [
-    ("person2", "Person_2_Faithful_FUS",      "code/eval_fus.py"),
-    ("person3", "Person_3_Reference_Baselines","code/eval.py"),
-    ("person1", "Person_1_Faithful_Baseline", "code/eval.py"),
+    ("cross_check", "cross_check", "code/eval_fus.py"),
+    ("baselines",   "baselines",   "code/eval.py"),
+    ("core",        "core",        "code/eval.py"),
 ]
 
 
@@ -84,7 +84,7 @@ def main() -> int:
         print(f"FAILED streams: {failures}")
         return 1
     print("All streams completed successfully.")
-    print("Results CSVs are in each Person_*/results/ folder.")
+    print("Results CSVs are in core/results/, cross_check/results/, baselines/results/.")
     return 0
 
 
