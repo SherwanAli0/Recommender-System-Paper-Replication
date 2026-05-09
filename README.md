@@ -27,12 +27,12 @@ FUS at k=50 matches the paper's MAE_users to four decimal places (0.7025 vs 0.70
 
 ## Authors
 
-| Name | Affiliation |
-|---|---|
-| Sherwan Ali | Uskudar University |
-| Ipek Ucar | Uskudar University |
-| Yaprak Sevinc Aldogan | Uskudar University |
-| Yasmine Guidoum | Uskudar University |
+| Name | GitHub | Affiliation |
+|---|---|---|
+| Sherwan Ali | [@SherwanAli0](https://github.com/SherwanAli0) | Uskudar University |
+| Ipek Ucar | [@ipekucr](https://github.com/ipekucr) | Uskudar University |
+| Yaprak Sevinc Aldogan | [@YaprakSevincAldogan](https://github.com/YaprakSevincAldogan) | Uskudar University |
+| Yasmine Guidoum | [@Dandyyass](https://github.com/Dandyyass) | Uskudar University |
 
 Per-contribution roles are listed in [CONTRIBUTORS.md](CONTRIBUTORS.md). University course project, 2026.
 

@@ -5,16 +5,20 @@ type: software
 authors:
   - family-names: Ali
     given-names: Sherwan
-    affiliation: "University course project, 2026"
+    affiliation: "Uskudar University"
+    alias: SherwanAli0
   - family-names: Ucar
     given-names: Ipek
-    affiliation: "University course project, 2026"
+    affiliation: "Uskudar University"
+    alias: ipekucr
   - family-names: Sevinc Aldogan
     given-names: Yaprak
-    affiliation: "University course project, 2026"
+    affiliation: "Uskudar University"
+    alias: YaprakSevincAldogan
   - family-names: Guidoum
     given-names: Yasmine
-    affiliation: "University course project, 2026"
+    affiliation: "Uskudar University"
+    alias: Dandyyass
 license: MIT
 date-released: 2026-05-08
 keywords:
