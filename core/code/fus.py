@@ -240,7 +240,10 @@ def resnick_predict(u_idx, item_id, sim_row, item_raters_lookup, user_means, k):
     r_ui  = user_means[u_idx]
     numer = ((t_rats - user_means[t_uj]) * t_sims).sum()
     pred  = r_ui + numer / denom
-    return float(np.clip(pred, RATING_MIN, RATING_MAX))
+    # Audit (May 2026): no clip to [RATING_MIN, RATING_MAX].
+    # Paper Eq 19 is a real-valued residual-shrinkage formula with no clip.
+    # shared_contract.md §4.1 was updated to remove the clip mandate.
+    return float(pred)
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -288,12 +291,19 @@ def build_item_raters_dict(train_df, user_to_idx):
 def compute_user_means(train_df, users, user_to_idx):
     """
     Returns ndarray shape (n_users,) with each user's mean training rating.
-    Fallback 3.0 for users with no training ratings.
+
+    Audit (May 2026): fallback is the training-set global mean instead of
+    a hard-coded 3.0 when a user has no training ratings. The paper does
+    not specify a fallback; global mean is the principled CF choice.
+    On paper-filtered ML-100k this case essentially never fires (497
+    users all with >= 20 ratings).
+
     Source: pandas groupby mean
       https://pandas.pydata.org/docs/reference/api/pandas.core.groupby.GroupBy.mean.html
     """
     n = len(users)
-    means    = np.full(n, 3.0, dtype=np.float64)
+    global_mean = float(train_df["rating"].mean()) if len(train_df) else 3.0
+    means       = np.full(n, global_mean, dtype=np.float64)
     m_series = train_df.groupby("user_id")["rating"].mean()
     for uid, idx in user_to_idx.items():
         if uid in m_series.index:

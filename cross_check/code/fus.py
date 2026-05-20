@@ -268,8 +268,9 @@ def resnick_predict(u_idx, item_id, sim_row, item_raters_lookup, user_means, k):
     numer = ((top_ratings - user_means[top_uj_idx]) * top_sims).sum()
     pred  = r_ui + numer / denom
 
-    # shared_contract.md §4.1: clip to [1, 5]
-    return float(np.clip(pred, RATING_MIN, RATING_MAX))
+    # Audit (May 2026): no clip. Paper Eq 19 is a real-valued formula
+    # with no clip. shared_contract.md §4.1 updated accordingly.
+    return float(pred)
 
 
 # ─────────────────────────────────────────────────────────────────────────────
@@ -320,11 +321,17 @@ def build_item_raters_dict(train_df, user_to_idx):
 def compute_user_means(train_df, users, user_to_idx):
     """
     Returns ndarray of shape (n_users,) with each user's mean training rating.
+
+    Audit (May 2026): fallback for users with no training ratings is the
+    training-set global mean (principled CF choice), not a hard-coded 3.0.
+    On paper-filtered ML-100k this case essentially never fires.
+
     Source: pandas groupby mean
       https://pandas.pydata.org/docs/reference/api/pandas.core.groupby.GroupBy.mean.html
     """
     n = len(users)
-    means = np.full(n, 3.0, dtype=np.float64)   # fallback for cold users
+    global_mean = float(train_df["rating"].mean()) if len(train_df) else 3.0
+    means = np.full(n, global_mean, dtype=np.float64)
     m_series = train_df.groupby("user_id")["rating"].mean()
     for uid, idx in user_to_idx.items():
         if uid in m_series.index:

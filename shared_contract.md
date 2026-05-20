@@ -64,8 +64,8 @@ Reference (sklearn KFold doc): https://scikit-learn.org/stable/modules/generated
 | `RMSE_users` | analogous to Eq 22 | mean of per-user RMSE over users with at least 1 prediction |
 | `CR` | Eq 24 | coverage rate: predictions made divided by predictions attempted |
 
-### 4.1 Prediction clipping
-Predicted ratings must be clipped to [1, 5] before computing any metric. The paper does not state this explicitly, but every standard implementation does it because errors blow up RMSE otherwise.
+### 4.1 Prediction clipping (revised May 2026 audit)
+Predicted ratings are **NOT** clipped to [1, 5]. Paper Eq 19 is a real-valued residual-shrinkage formula with no clip; the literal-paper reading is to return the raw value. Previous versions of this contract mandated a clip (May 2026 audit revision: removed). Effect: MAE_data and RMSE rise slightly because some predictions land outside [1, 5]; the per-user metrics (MAE_users, RMSE_users) are nearly unaffected. CR matches the paper's published Fig. 5 to three decimals (0.601 vs 0.60 at k=1) either way.
 
 ### 4.2 Coverage Rate definition (do not confuse with accuracy)
 A prediction "counts as made" when the recommender returns a number for the (user, item) pair, even if that number is wrong. CR is therefore the *attempt* rate, not the *correctness* rate. The paper makes this point in Section V.D. Keep it in mind when interpreting results.

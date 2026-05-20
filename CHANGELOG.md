@@ -5,6 +5,18 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.1.0] - 2026-05-19
+
+### Changed (paper-faithfulness audit)
+- **Removed prediction clipping to [1, 5]** in `core/code/fus.py::resnick_predict` and `cross_check/code/fus.py::resnick_predict`. Paper Eq 19 is a real-valued residual-shrinkage formula; the literal-paper reading returns the raw value. `shared_contract.md` §4.1 was updated from "must clip" to "no clip" to match.
+- **Replaced user-mean fallback** in both `compute_user_means` functions from a hard-coded 3.0 to the training-set global mean. The paper does not specify a fallback; global mean is the principled CF choice. On paper-filtered ML-100k this case essentially never fires (497 users all with >= 20 ratings).
+
+### Updated
+- `core/results/results_FUS_A_warm.csv` and `cross_check/results/protocol_A/results_FUS_A_warm.csv` re-run on the audit-fixed code (no clip, global-mean fallback). CR at k=1, alpha=0 stays at the paper's published 0.60. MAE_data and RMSE rise slightly because some predictions now land outside [1, 5]; per-user metrics (MAE_users, RMSE_users) are essentially unchanged.
+
+### Rationale
+External audit of the implementation against the paper text flagged the clip and the 3.0 fallback as deviations from the literal paper formula. Both deviations are unambiguous on inspection of paper §IV.B and were applied consistently across both independent streams (core + cross_check).
+
 ## [1.0.0] - 2026-05-08
 
 ### Added
