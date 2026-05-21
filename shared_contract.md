@@ -106,14 +106,14 @@ One row per `(fold, k, alpha)` combination. So if you sweep k in {1, 2, 4, 6, 8,
 
 ---
 
-## 6. Hyperparameter sweeps
+## 6. Hyperparameter sweeps (revised May 2026 audit)
 
-| Sweep | Protocol A |
-|---|---|
-| `k` (neighborhood size) | {1, 2, 4, 6, 8, 10, 15, 20, 30, 50} |
-| `alpha` (FUS only) | {0, 0.7, 0.8, 0.9} |
+| System | k sweep | alpha sweep |
+|---|---|---|
+| FUS (core, cross_check) | {1, 2, 4, 6, 8, 10, 12, 14, …, 48, 50} = **26 values, paper §V.C.2** | {0, 0.7, 0.8, 0.9} |
+| Reference baselines (PF, GIM, CF) | {1, 2, 4, 6, 8, 10, 15, 20, 30, 50} (sparser; paper Figs 6-7 cap at k=10 because PF/GIM degrade beyond) | n/a |
 
-The reference baselines (PF, GIM) only need k up to 10. The paper's Figs 6 and 7 cap there because PF and GIM degrade beyond k=10.
+Audit revision: FUS now uses the paper's literal §V.C.2 sweep (26 values). The baseline sweep is unchanged because the paper's baseline-comparison figures (Figs 6-7) only cover k up to 10.
 
 ---
 

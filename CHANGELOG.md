@@ -8,14 +8,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.1.0] - 2026-05-19
 
 ### Changed (paper-faithfulness audit)
-- **Removed prediction clipping to [1, 5]** in `core/code/fus.py::resnick_predict` and `cross_check/code/fus.py::resnick_predict`. Paper Eq 19 is a real-valued residual-shrinkage formula; the literal-paper reading returns the raw value. `shared_contract.md` §4.1 was updated from "must clip" to "no clip" to match.
-- **Replaced user-mean fallback** in both `compute_user_means` functions from a hard-coded 3.0 to the training-set global mean. The paper does not specify a fallback; global mean is the principled CF choice. On paper-filtered ML-100k this case essentially never fires (497 users all with >= 20 ratings).
+- **Removed prediction clipping to [1, 5]** in all four prediction code paths: `core/code/fus.py::resnick_predict`, `core/code/fus.py::resnick_from_walk` (production), `cross_check/code/fus.py::resnick_predict`, and `cross_check/code/eval_fus.py::resnick` (production). Paper Eq 19 is a real-valued residual-shrinkage formula; the literal-paper reading returns the raw value. `shared_contract.md` §4.1 updated from "must clip" to "no clip" to match.
+- **Replaced user-mean fallback** in both `compute_user_means` functions from a hard-coded 3.0 to the training-set global mean. Paper-silent; global mean is the principled CF choice. On paper-filtered ML-100k this case essentially never fires (497 users all with >= 20 ratings).
+- **Expanded FUS k-sweep from 10 to 26 values** to match paper §V.C.2: `k = {1, 2, 4, 6, 8, 10, ..., 48, 50}`. Updated `K_VALUES` in `core/code/eval.py` and `cross_check/code/eval_fus.py`; `shared_contract.md` §6 rewritten so FUS uses the paper's literal sweep while the baseline-comparison sweep (PF, GIM, CF) stays at 10 values (paper Figs 6-7 only cover k up to 10).
 
 ### Updated
-- `core/results/results_FUS_A_warm.csv` and `cross_check/results/protocol_A/results_FUS_A_warm.csv` re-run on the audit-fixed code (no clip, global-mean fallback). CR at k=1, alpha=0 stays at the paper's published 0.60. MAE_data and RMSE rise slightly because some predictions now land outside [1, 5]; per-user metrics (MAE_users, RMSE_users) are essentially unchanged.
+- `core/results/results_FUS_A_warm.csv` and `cross_check/results/protocol_A/results_FUS_A_warm.csv` now contain the full paper sweep (26 k values × 4 alpha × 10 folds = 1040 rows each), run on the audit-fixed code (no clip, global-mean fallback). CR at k=1, alpha=0 stays at the paper's published 0.60. MAE_data and RMSE rise slightly because some predictions now land outside [1, 5]; per-user metrics (MAE_users, RMSE_users) are essentially unchanged.
 
 ### Rationale
-External audit of the implementation against the paper text flagged the clip and the 3.0 fallback as deviations from the literal paper formula. Both deviations are unambiguous on inspection of paper §IV.B and were applied consistently across both independent streams (core + cross_check).
+External audit of the implementation against the paper text flagged the clip, the 3.0 fallback, and the sparse k-sweep as deviations from the literal paper formula. All three are unambiguous on inspection of paper §IV.B and §V.C.2, and were applied consistently across both independent streams (core + cross_check).
 
 ## [1.0.0] - 2026-05-08
 

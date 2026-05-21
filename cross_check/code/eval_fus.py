@@ -29,8 +29,10 @@ RESULTS_DIR = os.path.join(_HERE, "..", "results", "protocol_A")
 os.makedirs(RESULTS_DIR, exist_ok=True)
 RATINGS_PATH = os.path.join(DATA_DIR, "u.data")
 
-K_VALUES = [1, 2, 4, 6, 8, 10, 15, 20, 30, 50]   # shared_contract.md §6
-ALPHAS = [0.0, 0.7, 0.8, 0.9]                    # shared_contract.md §6
+# Paper §V.C.2: "k = {1, 2, 4, 6, 8, 10, ..., 48, 50}" -- 26 values.
+K_VALUES = [1, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28,
+            30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50]
+ALPHAS = [0.0, 0.7, 0.8, 0.9]                    # paper §V.C.2
 
 
 def precompute_sorted_nbrs(sim_mat):
