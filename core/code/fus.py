@@ -369,6 +369,12 @@ def resnick_from_walk(walk, k, u_mean_i, user_means):
     Resnick prediction from a rank-aware walk sliced to entries with rank < k.
     Returns np.nan if no qualifying neighbor or sim-sum is zero.
     Source: paper §IV.B Eq 19.
+
+    Audit (May 2026): no clip to [RATING_MIN, RATING_MAX]. Paper Eq 19
+    is real-valued. shared_contract.md §4.1 was updated to remove the
+    clip mandate. This is the production prediction function called by
+    eval.py (the other resnick_predict in this file is the standalone
+    reference version).
     """
     top = [(j, s, r) for rank, j, s, r in walk if rank < k]
     if not top:
@@ -377,4 +383,4 @@ def resnick_from_walk(walk, k, u_mean_i, user_means):
     if denom == 0.0:
         return np.nan
     numer = sum((r - user_means[j]) * s for j, s, r in top)
-    return float(np.clip(u_mean_i + numer / denom, RATING_MIN, RATING_MAX))
+    return float(u_mean_i + numer / denom)

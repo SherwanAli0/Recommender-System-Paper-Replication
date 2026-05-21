@@ -64,6 +64,11 @@ def build_walks(test_triples, user_to_idx, sorted_nbrs, item_raters_dict,
 
 
 def resnick(walk, k, u_mean_i, user_means):
+    # Audit (May 2026): no clip. Paper Eq 19 is real-valued.
+    # shared_contract.md §4.1 was updated to remove the clip mandate.
+    # This is the production prediction function called by the
+    # cross_check evaluator (eval_fus.main below). The other
+    # resnick_predict in fus.py is the standalone reference version.
     top = [(j, s, r) for rank, j, s, r in walk if rank < k]
     if not top:
         return None
@@ -71,7 +76,7 @@ def resnick(walk, k, u_mean_i, user_means):
     if denom == 0.0:
         return None
     numer = sum((r - user_means[j]) * s for j, s, r in top)
-    return float(np.clip(u_mean_i + numer / denom, 1.0, 5.0))
+    return float(u_mean_i + numer / denom)
 
 
 def metrics(test_triples, preds_dict, user_to_idx):
