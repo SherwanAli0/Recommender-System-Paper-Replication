@@ -21,7 +21,7 @@ cross_check/
 
 ## What this implementation produces
 
-The `fus.py` module implements the paper's Eqs 1 to 19 directly:
+The `fus.py` module implements the paper's Eqs 1 to 19 directly: 
 
 - Per-user fuzzy signature matrix `USui(s, m) = min(RatPop(s), ItemAttr(m))` for rated cells.
 - Asymmetric kindredness similarity `sim(i, j) = sum(min(USi, USj)) / sum(USi)`.
