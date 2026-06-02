@@ -8,7 +8,7 @@ This script runs only the CF sweep (unique to the core implementation) then gene
 
 Sources (NO-ORIGINAL-CODE RULE):
   paper §V       : evaluation methodology, metrics Eqs 20-24
-  shared_contract: §3 (KFold), §4 (metrics), §5 (CSV), §6 (sweeps)
+  shared_contract: 3 (KFold), 4 (metrics), 5 (CSV), 6 (sweeps)
   sklearn KFold  : https://scikit-learn.org/stable/modules/generated/
                      sklearn.model_selection.KFold.html
   pandas to_csv  : https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_csv.html
@@ -57,31 +57,41 @@ os.makedirs(FIGS_DIR, exist_ok=True)
 # -----------------------------------------------------------------------------
 # SWEEP PARAMETERS - shared_contract.md §6
 # -----------------------------------------------------------------------------
-# Paper §V.C.2: "k = {1, 2, 4, 6, 8, 10, ..., 48, 50}" -- 26 values.
+# Paper V.C.2: "k = {1, 2, 4, 6, 8, 10, ..., 48, 50}" -- 26 values.
 K_VALUES     = [1, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28,
                 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50]
 ALPHA_VALUES = [0.0, 0.7, 0.8, 0.9]
 ALPHA_COLORS = {0.0: "#1f77b4", 0.7: "#ff7f0e", 0.8: "#2ca02c", 0.9: "#d62728"}
 
+# -----------------------------------------------------------------------------
+# METRICS - paper V.B Eqs 20-24
+# -----------------------------------------------------------------------------
 
-# -----------------------------------------------------------------------------
-# METRICS - paper §V.B Eqs 20-24
-# Source: paper Eqs 20-24; shared_contract.md §4
-# -----------------------------------------------------------------------------
+
 def compute_metrics(errors_all, user_errors, n_predicted, n_total):
     if len(errors_all) == 0:
         return 9.9, 9.9, 9.9, 9.9, 0.0
     abs_e = [abs(e) for e in errors_all]
     sq_e  = [e * e  for e in errors_all]
+    # Paper Eq 20 (MAE_data) and Eq 23 (RMSE). Audit: denominator is the
+    # number of successful predictions (Herlocker 2004 convention); the
+    # rate of missing predictions is reported separately via CR (Eq 24).
     mae_data = float(np.mean(abs_e))
     rmse     = float(np.sqrt(np.mean(sq_e)))
     pu_mae, pu_rmse = [], []
     for uid, errs in user_errors.items():
         if errs:
+            # Paper Eq 21: per-user MAE.
             pu_mae.append(float(np.mean([abs(e) for e in errs])))
+            # RMSE_users: per-user RMSE, then averaged across users.
+            # Paper does not give an explicit equation but plots this in
+            # Fig. 4 (lower curve) and quotes "starting from 1.123 ...
+            # reaching 0.957" on p. 9982.
             pu_rmse.append(float(np.sqrt(np.mean([e*e for e in errs]))))
+    # Paper Eq 22: MAE_users = mean of per-user MAE.
     mae_users  = float(np.mean(pu_mae))  if pu_mae  else 9.9
     rmse_users = float(np.mean(pu_rmse)) if pu_rmse else 9.9
+    # Paper Eq 24: Coverage Rate = |Y_hat| / |V|.
     cr         = float(n_predicted / n_total) if n_total > 0 else 0.0
     return mae_data, mae_users, rmse, rmse_users, cr
 

@@ -326,6 +326,11 @@ def precompute_sorted_nbrs(sim_mat):
     For every user i, sort all other users by sim_mat[i] descending.
     Self excluded by setting sim_mat[i, i] = -1.0 before argsort.
     Returns list of n_users arrays, each shape (n_users,).
+
+    Paper IV.B defines the top-k neighborhood N^k_ui as the k users
+    with the highest similarity to u_i - i.e. u_i itself is excluded
+    by construction. The -1.0 trick implements that exclusion.
+
     Source: numpy.argsort
     """
     n = sim_mat.shape[0]
