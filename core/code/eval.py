@@ -8,7 +8,7 @@ This script runs only the CF sweep (unique to the core implementation) then gene
 
 Sources (NO-ORIGINAL-CODE RULE):
   paper §V       : evaluation methodology, metrics Eqs 20-24
-  shared_contract: §3 (KFold), §4 (metrics), §5 (CSV), §6 (sweeps)
+  shared_contract: 3 (KFold), 4 (metrics), 5 (CSV), 6 (sweeps)
   sklearn KFold  : https://scikit-learn.org/stable/modules/generated/
                      sklearn.model_selection.KFold.html
   pandas to_csv  : https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.to_csv.html
