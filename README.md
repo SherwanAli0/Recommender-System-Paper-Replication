@@ -12,7 +12,7 @@
 
 This repository is an independent paper-faithful replication of the FUS recommender introduced by D'Aniello et al. and the three reference systems they compare it against (CF, PF, GIM). All four systems are evaluated on the same filtered MovieLens 100k subset (497 users, 903 items, 79,432 ratings) under the same 10-fold cross-validation protocol the paper specifies. The replication reproduces the paper's headline ordering FUS > CF > GIM > PF on both MAE and Coverage Rate, with FUS Coverage matching the paper to within 1.4 percent at every neighborhood size and MAE_users at k=50 matching to four decimal places (0.7025 vs 0.703).
 
-## Headline result
+## Headline result 
 
 At k=10, alpha=0 (Protocol A, mean over 10 folds):
 
