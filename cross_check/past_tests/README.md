@@ -10,36 +10,36 @@ The full hypothesis log is in `../REPRO_DEBUG_NOTES.md`.
 
 ```
 past_tests/
-├── README.md                                       (this file)
-├── code/
-│   ├── eval_warm_paper_curve_approx.py             (FUS eval with floor/round post-processing)
-│   └── repro_den_all_floor.py                      (denominator-all vs den-raters hypothesis test)
-└── results/
-    ├── repro_den_all_floor.csv                     (den_all vs den_raters hypothesis results)
-    ├── comparison_paper_vs_faithful_vs_curve_approx.csv
-    ├── fus_baseline_predictions_alpha0.csv
-    ├── results_FUS_A_warm_paper_curve_approx.csv   (paper-curve approximation output)
-    ├── repro_hypotheses_baselines.csv
-    ├── repro_hypotheses_denominator_literal.csv
-    ├── repro_hypotheses_filters.csv
-    ├── repro_hypotheses_grid.csv
-    ├── repro_hypotheses_movielens_u1u5.csv
-    ├── repro_hypotheses_neighbor_order.csv
-    ├── repro_hypotheses_population_all_raw.csv
-    ├── repro_hypotheses_population_all_users_items20.csv
-    ├── repro_hypotheses_shuffle42_train.csv
-    ├── repro_hypotheses_signature_binary_mask.csv
-    ├── repro_hypotheses_signature_rating_value_mask.csv
-    ├── repro_hypotheses_signature_ratpop_mask.csv
-    ├── repro_hypotheses_signature_ratpop_unmasked_items.csv
-    ├── repro_hypotheses_similarity_direction.csv
-    ├── repro_hypotheses_split_kfold_noshuffle.csv
-    ├── repro_hypotheses_split_kfold_shuffle0.csv
-    ├── repro_hypotheses_split_timestamp_blocks.csv
-    ├── repro_hypotheses_user_means.csv
-    ├── repro_metric_postprocess_curves.csv
-    ├── repro_metric_postprocess_scores.csv
-    └── repro_mixed_postprocess_scores.csv
++-- README.md                                       (this file)
++-- code/
+|   +-- eval_warm_paper_curve_approx.py             (FUS eval with floor/round post-processing)
+|   +-- repro_den_all_floor.py                      (denominator-all vs den-raters hypothesis test)
++-- results/
+    +-- repro_den_all_floor.csv                     (den_all vs den_raters hypothesis results)
+    +-- comparison_paper_vs_faithful_vs_curve_approx.csv
+    +-- fus_baseline_predictions_alpha0.csv
+    +-- results_FUS_A_warm_paper_curve_approx.csv   (paper-curve approximation output)
+    +-- repro_hypotheses_baselines.csv
+    +-- repro_hypotheses_denominator_literal.csv
+    +-- repro_hypotheses_filters.csv
+    +-- repro_hypotheses_grid.csv
+    +-- repro_hypotheses_movielens_u1u5.csv
+    +-- repro_hypotheses_neighbor_order.csv
+    +-- repro_hypotheses_population_all_raw.csv
+    +-- repro_hypotheses_population_all_users_items20.csv
+    +-- repro_hypotheses_shuffle42_train.csv
+    +-- repro_hypotheses_signature_binary_mask.csv
+    +-- repro_hypotheses_signature_rating_value_mask.csv
+    +-- repro_hypotheses_signature_ratpop_mask.csv
+    +-- repro_hypotheses_signature_ratpop_unmasked_items.csv
+    +-- repro_hypotheses_similarity_direction.csv
+    +-- repro_hypotheses_split_kfold_noshuffle.csv
+    +-- repro_hypotheses_split_kfold_shuffle0.csv
+    +-- repro_hypotheses_split_timestamp_blocks.csv
+    +-- repro_hypotheses_user_means.csv
+    +-- repro_metric_postprocess_curves.csv
+    +-- repro_metric_postprocess_scores.csv
+    +-- repro_mixed_postprocess_scores.csv
 ```
 
 ---

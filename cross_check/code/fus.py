@@ -22,11 +22,11 @@ RATING_MIN = 1
 RATING_MAX = 5
 
 
-# ─────────────────────────────────────────────────────────────────────────────
+#
 # 1. DATA LOADING
 # Source: pandas.read_csv docs
 #   https://pandas.pydata.org/docs/reference/api/pandas.read_csv.html
-# ─────────────────────────────────────────────────────────────────────────────
+#
 def load_ratings(path):
     """Load ml-100k/u.data.  Returns DataFrame [user_id, item_id, rating, timestamp]."""
     return pd.read_csv(
@@ -35,13 +35,13 @@ def load_ratings(path):
     )
 
 
-# ─────────────────────────────────────────────────────────────────────────────
+#
 # 2. DATASET FILTERING - paper §V.A; shared_contract.md §2.3
 # Source: pandas Series.value_counts
 #   https://pandas.pydata.org/docs/reference/api/pandas.Series.value_counts.html
 #         pandas Series.nlargest
 #   https://pandas.pydata.org/docs/reference/api/pandas.Series.nlargest.html
-# ─────────────────────────────────────────────────────────────────────────────
+#
 def filter_dataset(ratings_df):
     """
     paper §V.A: "removing the movies with fewer than 20 votes and selecting
@@ -70,13 +70,13 @@ def filter_dataset(ratings_df):
     return r
 
 
-# ─────────────────────────────────────────────────────────────────────────────
+#
 # 3. PER-USER 2-D MATRIX Mat_ui - paper §IV.A
 # Source: paper §IV.A: "A 2-D slice of the matrix, fixing a user ui, contains
 #         all the ratings given by the user ui to all the items in M,
 #         Matui = <S × M>".
 #         numpy.zeros: https://numpy.org/doc/stable/reference/generated/numpy.zeros.html
-# ─────────────────────────────────────────────────────────────────────────────
+#
 def build_user_matrix(user_ratings_df, item_to_idx, n_items):
     """
     Build Mat_ui of shape (N_RATINGS=5, n_items).
@@ -93,11 +93,11 @@ def build_user_matrix(user_ratings_df, item_to_idx, n_items):
     return mat
 
 
-# ─────────────────────────────────────────────────────────────────────────────
+#
 # 4. RATING FREQUENCY and RATING PER ITEM - paper §IV.A Eqs 8-9
 # Source: paper §IV.A Eqs 8-9
 #   numpy.sum: https://numpy.org/doc/stable/reference/generated/numpy.sum.html
-# ─────────────────────────────────────────────────────────────────────────────
+#
 def rating_frequency(mat_ui):
     """Eq 8: SF(sj) = Σ_k Mat_ui[j, k].  Returns shape (5,)."""
     return mat_ui.sum(axis=1)
@@ -108,11 +108,11 @@ def rating_per_item(mat_ui):
     return mat_ui.sum(axis=0)
 
 
-# ─────────────────────────────────────────────────────────────────────────────
+#
 # 5. RATING POPULARITY and ITEM ATTRACTIVENESS - paper §IV.A Eqs 10-13
 # Source: paper §IV.A Eqs 10-13
 #   "aj = SF(sj) / max_{s∈S} SF(s)"  (per-user max, NOT global max)
-# ─────────────────────────────────────────────────────────────────────────────
+#
 def rat_pop(mat_ui):
     """
     paper Eqs 10-11: RatPopui(sj) = SF(sj) / max_s SF(s).
@@ -140,14 +140,14 @@ def item_attr(mat_ui):
     return si / max_si
 
 
-# ─────────────────────────────────────────────────────────────────────────────
+#
 # 6. USER SIGNATURE - paper §IV.A Eqs 14-15
 # Source: paper §IV.A Eqs 14-15
 #   "USui(sj, mk) = min{RatPopui(sj), ItemAttrui(mk)}"
 #   "transforming each cell marked with an X in Matui in a value calculated
 #    with Eq. 15" - only the non-zero cells of Matui are transformed.
 #   numpy.minimum: https://numpy.org/doc/stable/reference/generated/numpy.minimum.html
-# ─────────────────────────────────────────────────────────────────────────────
+#
 def user_signature(mat_ui):
     """
     paper Eqs 14-15: USui(sj, mk) = min(RatPop(sj), ItemAttr(mk)).
@@ -166,14 +166,14 @@ def user_signature(mat_ui):
     return us
 
 
-# ─────────────────────────────────────────────────────────────────────────────
+#
 # 7. USER KINDREDNESS - paper §IV Eqs 16-18, ASYMMETRIC
 # Source: paper §IV Eqs 16-18
 #   "sim(ui, uj) = sum(Tnorm(USui, USuj)) / sum(USui)"
 #   "cardinality is calculated by summing only the membership values that are
 #    greater than α" - scalar cardinality with α-cut.
 #   numpy.where: https://numpy.org/doc/stable/reference/generated/numpy.where.html
-# ─────────────────────────────────────────────────────────────────────────────
+#
 def kindredness(us_i, us_j, alpha=0.0):
     """
     paper Eq 18: sim(ui, uj) = Σ min(USi_α, USj_α) / Σ USi_α
@@ -189,14 +189,14 @@ def kindredness(us_i, us_j, alpha=0.0):
     return float(numer / denom)
 
 
-# ─────────────────────────────────────────────────────────────────────────────
+#
 # 8. FULL PAIRWISE SIMILARITY MATRIX (vectorised over j for each i)
 # Source: paper §IV Eq 18 applied to all (i, j) pairs.
 #   numpy broadcasting / numpy.minimum:
 #   https://numpy.org/doc/stable/reference/generated/numpy.minimum.html
 #   Vectorisation pattern adapted from:
 #   https://numpy.org/doc/stable/user/basics.broadcasting.html
-# ─────────────────────────────────────────────────────────────────────────────
+#
 def compute_sim_matrix(all_us, alpha=0.0):
     """
     Compute (n_users, n_users) kindredness matrix.
@@ -221,7 +221,7 @@ def compute_sim_matrix(all_us, alpha=0.0):
     return sim_mat
 
 
-# ─────────────────────────────────────────────────────────────────────────────
+#
 # 9. RESNICK PREDICTION - paper §IV.B Eq 19 with exclusion correction
 # Source: paper §IV.B Eq 19
 #   "if a user uj has not voted for item m, the whole term of the summation
@@ -230,7 +230,7 @@ def compute_sim_matrix(all_us, alpha=0.0):
 #   Resnick (1994): https://dl.acm.org/doi/10.1145/192844.192905
 #   numpy.argsort: https://numpy.org/doc/stable/reference/generated/numpy.argsort.html
 #   numpy.clip:    https://numpy.org/doc/stable/reference/generated/numpy.clip.html
-# ─────────────────────────────────────────────────────────────────────────────
+#
 def resnick_predict(u_idx, item_id, sim_row, item_raters_lookup, user_means, k):
     """
     paper Eq 19: p^m_ui = r_ui + Σ_{uj∈Nk} (r^m_uj − r_uj)·sim / Σ sim
@@ -273,11 +273,11 @@ def resnick_predict(u_idx, item_id, sim_row, item_raters_lookup, user_means, k):
     return float(pred)
 
 
-# ─────────────────────────────────────────────────────────────────────────────
+#
 # 10. HELPERS - precompute per-item rater lists and user means
 # Source: pandas.DataFrame.groupby
 #   https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.groupby.html
-# ─────────────────────────────────────────────────────────────────────────────
+#
 def build_item_raters(train_df, user_to_idx):
     """
     Returns dict: item_id → (rater_idxs ndarray, ratings ndarray).

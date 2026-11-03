@@ -10,16 +10,16 @@ This folder holds the primary implementation track of the project (Software role
 
 ```
 core/
-├── README.md                       this file
-├── code/
-│   ├── fus.py                      FUS: Eqs 1 to 19, kindredness, Resnick
-│   ├── cf.py                       Pearson KNN CF baseline (pure NumPy)
-│   └── eval.py                     evaluation harness: copies the FUS CSV, runs the CF sweep, draws 4 figures
-├── results/
-│   ├── results_FUS_A_warm.csv      1040 rows: 10 folds x 26 k x 4 alpha (copy of the cross_check CSV)
-│   ├── results_CF_A_warm.csv       100 rows: 10 folds x 10 k
-│   └── figs/                       fig2 to fig5, drawn from the faithful FUS CSV
-└── past_tests/                     diagnostic experiments (see past_tests/README.md)
++-- README.md                       this file
++-- code/
+|   +-- fus.py                      FUS: Eqs 1 to 19, kindredness, Resnick
+|   +-- cf.py                       Pearson KNN CF baseline (pure NumPy)
+|   +-- eval.py                     evaluation harness: copies the FUS CSV, runs the CF sweep, draws 4 figures
++-- results/
+|   +-- results_FUS_A_warm.csv      1040 rows: 10 folds x 26 k x 4 alpha (copy of the cross_check CSV)
+|   +-- results_CF_A_warm.csv       100 rows: 10 folds x 10 k
+|   +-- figs/                       fig2 to fig5, drawn from the faithful FUS CSV
++-- past_tests/                     diagnostic experiments (see past_tests/README.md)
 ```
 
 ## Algorithm details
