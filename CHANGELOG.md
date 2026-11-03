@@ -5,6 +5,31 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Fixed
+- **Dataset path.** `core/code/eval.py`, `cross_check/code/eval_fus.py`, `baselines/code/eval.py`, `baselines/code/test_baselines.py` and `run_all.py` looked for `ml-100k/` one directory above the repository (left over from the pre-restructure layout), while the README, Makefile, `.gitignore` and the `run_all.py` error message put it in the repository root. They now use the repository root. Two `cross_check/past_tests/code` scripts also had the wrong data path and imported `fus` from a folder that does not contain it; both fixed.
+- **Silent failure.** `core/code/eval.py` returned exit code 0 when the cross_check FUS CSV was missing, so `run_all.py` printed "All streams completed successfully" without running the core stream. It now exits with code 1.
+- **CF k sweep.** The 1.1.0 change of `K_VALUES` in `core/code/eval.py` also expanded the CF sweep from 10 to 26 values, contradicting `shared_contract.md` Section 6 and the committed CF CSV (10 values). CF now uses the 10-value baseline sweep again.
+
+- **Missing dependency.** `baselines/code/eval.py` runs GIM with the genetic algorithm, which imports `deap`, but `deap` was in neither `requirements.txt` nor `environment.yml`, so the supported `run_all.py` path failed at the GIM step with `ModuleNotFoundError`. Added `deap>=1.4,<2.0` (checked with 1.4.4).
+- **Redirected output on Windows.** `baselines/code/eval.py` prints non-ASCII characters and crashed with `UnicodeEncodeError` (cp1252) when its output was redirected, which is what `run_all.py` does when output is captured. stdout is now switched to UTF-8.
+
+### Documentation corrections (results unchanged)
+- README "Latest full rerun": full rerun in a scratch copy with the real dataset. Loaders give 497/903/79,432 in all streams with identical rows and folds, and there is no tie at the 497th rating count. The FUS rerun matches the committed file at alpha=0 to rounding and differs by up to 0.010 per fold at alpha>0 (neighbor-sort tie order); the committed CF CSV is reproduced exactly only with clipping on; the committed PF CSV and the GIM CSV are not reproduced (GIM's genetic algorithm is unseeded). Run times: about 18 min, 8 min and 1 min for cross_check, baselines and core. Committed results were not replaced.
+- README, RESULTS_SUMMARY, `core/README.md` and `cross_check/README.md` quoted "faithful" FUS numbers (for example k=10 MAE_users 0.7728, k=1 MAE_data 0.857) from the 2026-05-09 run that predates the 1.1.0 audit. They now quote the committed audit-fixed CSV (k=10 MAE_users 0.7788, k=1 MAE_data 0.8843). The floor/round columns are from the pre-audit diagnostic CSV and are now labelled as such.
+- The paper's values for PF, GIM and CF at k=10 were re-read from its Figs. 6 and 7; CF is reported there (earlier docs said "not reported") and is the worst system, so the stated ordering "FUS > CF > GIM > PF" is not the paper's. FUS CR at k=10 in the paper's text is 97.9%, not about 0.99.
+- "Matches to four decimal places" (0.7025 vs 0.703) replaced by the supported statement: agrees at the three decimals the paper reports, and only under the floor/round post-processing. "12 to 16 percent lower" is replaced by the per-metric direction (MAE_data and RMSE lower, MAE_users higher).
+- Documented that `python run_all.py --tests` only runs pytest on the committed CSVs, that the core FUS CSV is a copy of the cross_check one, that PF and GIM still clip predictions, and that the committed CF CSV predates the clip removal.
+- `core/README.md` described RatPop and ItemAttr (triangular membership, genre attributes) differently from the code and the paper; corrected. Stale sweep definitions (old k and alpha sets) and a nonexistent test name were corrected in `core/README.md` and `cross_check/README.md`.
+- Removed the static "tests: 12 passing" badge and the hard-coded test counts.
+
+### Changed
+- Figures: `core/results/figs/` now holds figures drawn from the committed faithful FUS CSV (titled "FUS faithful"), which is what `core/code/eval.py` produces. The previous figures, drawn from the floor/round diagnostic CSV, were moved with `git mv` to `core/past_tests/results/figs/`.
+
+### Added
+- Data-free regression tests in `tests/test_sanity.py`: data-path check for each eval script, k-sweep versus committed CSV check, and core versus cross_check FUS agreement on a synthetic fixture.
+
 ## [1.1.0] - 2026-05-19
 
 ### Changed (paper-faithfulness audit)

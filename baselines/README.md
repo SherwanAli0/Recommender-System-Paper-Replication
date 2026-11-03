@@ -18,7 +18,7 @@ baselines/
 │   ├── pf.py                              PF, Hao 2016
 │   ├── gim.py                             GIM, Al-Shamri & Bharadwaj 2008
 │   ├── eval.py                            10-fold CV, sweep, metrics, CSV writers
-│   └── test_baselines.py                  unit tests for filter shape and PF neighbourhood
+│   └── test_baselines.py                  unit tests for filter shape (needs the dataset) and PF neighbourhood
 ├── papers/
 │   └── hao2016_9535808_pf.pdf             source paper for PF
 ├── past_tests/                            theta sweep + post-processing hypothesis tests
@@ -43,7 +43,9 @@ baselines/
 pip install numpy pandas scikit-learn
 ```
 
-Dataset files needed in `../ml-100k/`. See [`../shared_contract.md`](../shared_contract.md) Section 2.
+Dataset files needed in `ml-100k/` in the repository root (one level above this folder): `u.data`, `u.item`, `u.user`. See [`../shared_contract.md`](../shared_contract.md) Section 2.
+
+Note: PF and GIM clip their predictions to [1, 5] (`code/pf.py`, `code/gim.py`), whereas the FUS and CF code no longer clips (contract Section 4.1). The committed PF and GIM results were produced with clipping. The paper's own values at k=10, read by eye from its Fig. 6, are about 0.91 (PF) and 0.83 (GIM) for MAE_users; the 0.88 and 0.85 quoted elsewhere in this repository's sanity bands were read less precisely.
 
 ### Run evaluation
 

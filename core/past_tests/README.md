@@ -12,7 +12,8 @@ past_tests/
 ├── code/
 │   └── regenerate_plots_approx.py         (script that regenerates figs from paper-curve-approx data)
 └── results/
-    └── results_FUS_A_warm_paper_curve_approx.csv  (FUS results with floor/round post-processing)
+    ├── results_FUS_A_warm_paper_curve_approx.csv  (FUS results with floor/round post-processing)
+    └── figs/                                      (fig2 to fig5 drawn from that CSV)
 ```
 
 ---
@@ -23,9 +24,9 @@ past_tests/
 
 A standalone script that reads `results_FUS_A_warm_paper_curve_approx.csv` and regenerates the four paper-style figures (`fig2` through `fig5`). 
 
-**Why it exists**: During replication investigation, we discovered the paper likely applies `floor(prediction)` for dataset-level metrics and `round(prediction)` for user-level metrics. This script produces figures from that approximation, making them match the paper's Figs 3-5 visually. The figures in `results/figs/` were generated using this script.
+**Why it exists**: During replication investigation, we discovered the paper likely applies `floor(prediction)` for dataset-level metrics and `round(prediction)` for user-level metrics. This script produces figures from that approximation, making them match the paper's Figs 3-5 visually. It writes the figures to `results/figs/` in this `past_tests` folder (`core/past_tests/results/figs/`). The committed PNGs are the figures that were previously in `core/results/figs/` (their curves match this CSV, e.g. MAE_data about 0.817 at k=50; a fresh run with a current matplotlib is not byte-identical); the figures there now are drawn from the faithful CSV by `core/code/eval.py`. The approximation CSV was produced before the v1.1.0 audit (10 k values, predictions clipped to [1, 5]) and has not been regenerated.
 
-**To run**: `python past_tests/code/regenerate_plots_approx.py` from the the core implementation root.
+**To run** (needs no dataset): `python code/regenerate_plots_approx.py` from `core/past_tests/`.
 
 ### `results/results_FUS_A_warm_paper_curve_approx.csv`
 

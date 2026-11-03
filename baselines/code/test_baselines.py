@@ -10,7 +10,7 @@ from pf import ProbabilisticFiltering, filter_dataset, load_ratings, load_item_g
 class TestReferenceBaselines(unittest.TestCase):
     def test_filter_contract_shape(self):
         here = os.path.dirname(os.path.abspath(__file__))
-        ratings_path = os.path.join(here, "..", "..", "..", "ml-100k", "u.data")
+        ratings_path = os.path.join(here, "..", "..", "ml-100k", "u.data")
 
         df = load_ratings(ratings_path)
         df_f = filter_dataset(df)

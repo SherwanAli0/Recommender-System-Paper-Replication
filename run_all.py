@@ -21,7 +21,7 @@ import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
-ML100K = ROOT.parent / "ml-100k"
+ML100K = ROOT / "ml-100k"   # repository root, as documented in README.md and the Makefile
 
 
 STREAMS = [

@@ -2,6 +2,8 @@
 
 This folder contains hypothesis tests run against the PF (Hao 2016) and GIM (Al-Shamri 2008) implementations to verify that they are paper-faithful and to document the closest-fitting parameter choices.
 
+Note on the reference values: the gaps below are measured against paper values of 0.88 (PF) and 0.85 (GIM) for MAE_users at k=10. Re-reading the paper's Fig. 6 gives about 0.91 (PF) and 0.83 (GIM), so the PF gap is larger and the GIM gap smaller than the percentages shown. The tables are kept as originally recorded.
+
 ## What was tested
 
 ### `repro_pf_theta_sweep.py`

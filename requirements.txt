@@ -1,8 +1,12 @@
-# Core scientific stack - pinned to versions verified to reproduce the paper-faithful
-# numbers in this repository on Python 3.10, 3.11, 3.12 and 3.13. Newer minor versions
-# of these libraries should also work, but are not formally tested.
+# Core scientific stack - version ranges (not exact pins). The authors report that the
+# paper-faithful numbers reproduce on Python 3.10 to 3.13; CI runs the sanity tests on
+# 3.10 to 3.12. The test suite alone was also run on Python 3.11.9 with numpy 2.4.6,
+# pandas 2.3.3, scipy 1.17.1, scikit-learn 1.9.1, matplotlib 3.11.2 and pytest 9.2.0.
 numpy>=1.24,<3.0
 pandas>=2.0,<3.0
 scipy>=1.10,<2.0
 scikit-learn>=1.3,<2.0
 matplotlib>=3.7,<4.0
+# GIM's genetic algorithm (baselines/code/gim.py, run by baselines/code/eval.py) imports DEAP.
+# Checked with deap 1.4.4.
+deap>=1.4,<2.0

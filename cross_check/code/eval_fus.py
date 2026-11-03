@@ -24,7 +24,8 @@ _HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, _HERE)
 import fus
 
-DATA_DIR = os.path.join(_HERE, "..", "..", "..", "ml-100k")
+# ml-100k lives at the repository root (cross_check/code/ -> ../../ml-100k)
+DATA_DIR = os.path.join(_HERE, "..", "..", "ml-100k")
 RESULTS_DIR = os.path.join(_HERE, "..", "results", "protocol_A")
 os.makedirs(RESULTS_DIR, exist_ok=True)
 RATINGS_PATH = os.path.join(DATA_DIR, "u.data")
