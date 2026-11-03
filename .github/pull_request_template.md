@@ -33,7 +33,7 @@
 
 ## Tested
 
-- [ ] All 12 tests pass (`python run_all.py --tests` or `make tests`)
+- [ ] All tests pass (`python run_all.py --tests` or `make tests`)
 - [ ] Manually ran the affected stream end-to-end (`python run_all.py --only <stream>`)
 - [ ] Verified output CSVs match expected pass-bands
 

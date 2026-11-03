@@ -176,3 +176,16 @@ For the reference baselines (PF, GIM), the paper reports approximate visual valu
 - GIM: `MAE_users` approximately 0.85, `CR` approximately 0.92, pass band plus or minus 0.05.
 
 These are older papers, so small variation is expected.
+
+---
+
+## 11. Addendum: status of this contract against the committed results (documentation only)
+
+The contract text above is unchanged. This section records where the committed artifacts differ from it. No threshold or protocol was changed.
+
+- **Data location (Section 2.1).** `ml-100k/` is expected in the repository root. Earlier versions of the eval scripts and `run_all.py` looked one directory above the repository; they now match this section.
+- **Clipping (Section 4.1).** The FUS and CF code no longer clip. The committed FUS CSV is the unclipped run, but the committed CF CSV was produced before the clip was removed from `core/code/fus.py::resnick_from_walk`, so it is clipped and a re-run will differ slightly. PF and GIM (`baselines/code/pf.py`, `baselines/code/gim.py`) still clip predictions to [1, 5] in code and in their committed results.
+- **CF sweep (Section 6).** `core/code/eval.py` now uses the baseline k set for CF, matching the committed `results_CF_A_warm.csv` (10 k values); the 26-value FUS sweep lives in `cross_check/code/eval_fus.py`.
+- **Sanity bands (Section 10).** The FUS k=50, alpha=0 bands are for the paper's values. The faithful, unclipped run gives MAE_data 0.7333, MAE_users 0.7415 and RMSE 0.9383, which are outside the MAE_data (0.81 to 0.85), MAE_users (0.683 to 0.723) and RMSE (1.087 to 1.127) bands; the floor/round diagnostic run (MAE_data 0.8174, MAE_users 0.7025, RMSE 1.0779) is inside the first two and just below the third. `tests/test_sanity.py` has always used a wider MAE_users upper limit (0.793) and does not check MAE_data or RMSE at k=50.
+- **Baseline reference values (Section 10).** Reading the paper's Fig. 6 at k=10 gives MAE_users of about 0.91 for PF and 0.83 for GIM (Section 10 says 0.88 and 0.85), and Fig. 7 gives CR of about 0.92 for both. The paper's CF is about 0.93 (MAE_users) and about 0.88 (CR). The Section 10 bands for PF and GIM still contain the committed values.
+

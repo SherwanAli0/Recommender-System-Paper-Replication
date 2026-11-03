@@ -3,27 +3,32 @@
 [![tests](https://github.com/SherwanAli0/Recommender-System-Paper-Replication/actions/workflows/tests.yml/badge.svg)](https://github.com/SherwanAli0/Recommender-System-Paper-Replication/actions/workflows/tests.yml)
 [![License: MIT + CC-BY 4.0](https://img.shields.io/badge/license-MIT%20%2B%20CC--BY%204.0-yellow.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
-[![Tests passing](https://img.shields.io/badge/tests-12%20passing-brightgreen.svg)](tests/)
 [![Paper](https://img.shields.io/badge/IEEE%20Access-10.1109%2FACCESS.2026.3656087-darkblue.svg)](https://ieeexplore.ieee.org/document/11358877)
 
 > **Original paper.** G. D'Aniello, M. Della Corte, M. Gaeta. *A Recommendation System Based on Fuzzy Signature.* IEEE Access, vol. 14, pp. 9975 to 9985, 2026. [DOI: 10.1109/ACCESS.2026.3656087](https://ieeexplore.ieee.org/document/11358877)
 
 ## Abstract
 
-This repository is an independent paper-faithful replication of the FUS recommender introduced by D'Aniello et al. and the three reference systems they compare it against (CF, PF, GIM). All four systems are evaluated on the same filtered MovieLens 100k subset (497 users, 903 items, 79,432 ratings) under the same 10-fold cross-validation protocol the paper specifies. The replication reproduces the paper's headline ordering FUS > CF > GIM > PF on both MAE and Coverage Rate, with FUS Coverage matching the paper to within 1.4 percent at every neighborhood size and MAE_users at k=50 matching to four decimal places (0.7025 vs 0.703).
+This repository is a four-person university course replication of the FUS recommender introduced by D'Aniello et al. and of the three reference systems they compare it against (CF, PF, GIM). All four systems are evaluated on the same filtered MovieLens 100k subset (497 users, 903 items, 79,432 ratings) under the 10-fold cross-validation protocol the paper describes. What the committed results do and do not show:
 
-## Headline result 
+- **Coverage Rate (CR) of FUS follows the paper closely.** About 0.60 at k=1, 0.98 at k=10 and 0.9997 at k=50, against the paper's Fig. 5/7 curve (read by eye, roughly one percentage point of precision), its text value of 97.9% at k=10 and "around 99%" at k=50.
+- **FUS error metrics are not reproduced exactly.** The faithful implementation gives MAE_data and RMSE about 10 to 15 percent below the paper and MAE_users about 5 percent above it (k=1 and k=50). A floor/round post-processing, found by trial and not described in the paper, brings the k=50 numbers within 3 percent of the paper (see [Replication notes](#replication-notes)).
+- **The paper's ranking of the four systems at k=10 is only partly reproduced.** FUS has the lowest MAE_users and the highest CR, and GIM beats PF on MAE_users, as in the paper. The CF baseline here is much stronger than the paper's CF, so FUS and CF are roughly tied on MAE_users at k=10 and CF is better at k=50.
 
-At k=10, alpha=0 (Protocol A, mean over 10 folds):
+## Headline result
 
-| System | MAE_users (ours) | MAE_users (paper) | CR (ours) | CR (paper) | Status |
-|---|---|---|---|---|---|
-| FUS  | 0.7728 | ~0.74  | 0.9796 | ~0.99 | reproduces ordering and CR |
-| CF   | 0.7809 | not reported | 0.9299 | not reported | included as classical baseline |
-| GIM  | 0.8170 | ~0.85  | 0.9072 | ~0.92 | reproduces ordering and CR |
-| PF   | 0.8447 | ~0.88  | 0.9191 | ~0.92 | reproduces ordering and CR |
+At k=10, alpha=0 (Protocol A, mean over 10 folds). MAE_users is in rating points (1 to 5 scale), lower is better. CR is a fraction in [0, 1], higher is better (the paper's figures show it in percent). Paper values are read by eye from the paper's Figs. 6 and 7 (about +/-0.01 for MAE_users, about 1 point for CR), except the FUS and PF/GIM coverage values, which the paper's text states (97.9% and a 91.8% maximum).
 
-FUS at k=50 matches the paper's MAE_users to four decimal places (0.7025 vs 0.703) under the floor-and-round post-processing documented in [Replication notes](#replication-notes).
+| System | MAE_users (ours) | MAE_users (paper, Fig. 6) | CR (ours) | CR (paper, Fig. 7 and text) |
+|---|---|---|---|---|
+| FUS  | 0.7788 | ~0.74 | 0.9796 | 0.979 |
+| CF   | 0.7809 | ~0.93 | 0.9299 | ~0.88 |
+| GIM  | 0.8170 | ~0.83 | 0.9072 | ~0.92 |
+| PF   | 0.8447 | ~0.91 | 0.9191 | ~0.92 |
+
+Ordering by MAE_users at k=10 (best first): paper FUS, GIM, PF, CF; this replication FUS, CF, GIM, PF. Ordering by CR: paper FUS, then PF and GIM about equal, then CF; this replication FUS, CF, PF, GIM. The FUS-over-CF margin on MAE_users at k=10 is 0.002, smaller than the fold-to-fold spread (paired fold difference 0.0020 with standard deviation 0.0078, FUS lower in 6 of 10 folds).
+
+Provenance: the FUS row is the committed audit-fixed run (no prediction clipping). The CF row comes from a run that predates the clip removal, and PF and GIM still clip predictions to [1, 5] (see [Replication notes](#replication-notes)), so the table mixes clipped and unclipped predictions. The paper does report CF in its Figs. 6 and 7.
 
 ## Authors
 
@@ -53,12 +58,12 @@ Per-contribution roles are listed in [CONTRIBUTORS.md](CONTRIBUTORS.md). Univers
 │
 ├── core/                   FUS implementation + CF baseline (paper Eqs 1 to 19)
 │   ├── code/               fus.py, cf.py, eval.py
-│   ├── past_tests/         diagnostic experiments and paper-curve approximation
+│   ├── past_tests/         diagnostic experiments, floor/round approximation, its figures
 │   └── results/            results_FUS_A_warm.csv, results_CF_A_warm.csv, figs/
 │
-├── cross_check/            independent FUS implementation for cross-verification
+├── cross_check/            second FUS implementation (also produces the FUS CSV)
 │   ├── code/               fus.py, eval_fus.py
-│   ├── past_tests/         51-hypothesis replication investigation
+│   ├── past_tests/         replication investigation (hypothesis scripts and CSVs)
 │   └── results/            results_FUS_A_warm.csv (protocol A)
 │
 ├── baselines/              PF (Hao 2016) + GIM (Al-Shamri 2008) reference baselines
@@ -67,17 +72,18 @@ Per-contribution roles are listed in [CONTRIBUTORS.md](CONTRIBUTORS.md). Univers
 │   ├── past_tests/         theta sweep + post-processing hypothesis tests
 │   └── results/            results_PF_A_warm.csv, results_GIM_A_warm.csv
 │
-└── tests/                  cross-stream sanity checks (12 tests)
+└── tests/                  sanity checks on committed CSVs plus data-free regression checks
     └── test_sanity.py
 ```
 
-The core and cross_check folders both implement FUS independently. Two independent implementations producing identical numbers to four decimal places is the strongest correctness check available without access to the original authors' code.
+The `core` and `cross_check` folders hold two FUS implementations (written by different contributors, see [CONTRIBUTORS.md](CONTRIBUTORS.md)). They are structurally close, and the core stream reuses the cross_check FUS results instead of recomputing them, so agreement between them is a consistency check, not an independent derivation. See [Reproducibility](#reproducibility).
 
 ## Requirements
 
-- Python 3.10 to 3.13 (3.14 also works in our testing).
-- `numpy`, `pandas`, `scipy`, `scikit-learn`, `matplotlib`. Pinned in `requirements.txt`.
+- Python 3.10 to 3.13 is the documented range. CI runs the tests on 3.10, 3.11 and 3.12; the authors report running the evaluation on 3.14.
+- `numpy`, `pandas`, `scipy`, `scikit-learn`, `matplotlib` (version ranges in `requirements.txt`).
 - Optional: `pytest` for the test suite.
+- Last checked: the sanity tests were run on Python 3.11.9 with numpy 2.4.6, pandas 2.3.3, scipy 1.17.1, scikit-learn 1.9.1, matplotlib 3.11.2 and pytest 9.2.0. The full evaluation (which needs the dataset) was not re-run in that check.
 
 ```bash
 pip install -r requirements.txt
@@ -87,33 +93,46 @@ conda env create -f environment.yml && conda activate fus-replication
 
 ## Data
 
-The MovieLens 100k dataset is not committed to this repository (it is gitignored). Download it from GroupLens once and unzip into the repository root:
+The MovieLens 100k dataset (about 5 MB zipped, from GroupLens) is not committed to this repository (it is gitignored). Download it once and unzip it **inside the repository root**, so that `ml-100k/u.data` sits next to `run_all.py`:
 
 ```bash
 make data
-# or manually:
+# or manually (Linux/macOS/Git Bash):
 curl -L https://files.grouplens.org/datasets/movielens/ml-100k.zip -o ml-100k.zip
 unzip ml-100k.zip
+```
+
+```powershell
+# Windows PowerShell
+Invoke-WebRequest https://files.grouplens.org/datasets/movielens/ml-100k.zip -OutFile ml-100k.zip
+Expand-Archive ml-100k.zip -DestinationPath .
 ```
 
 After unzipping, the layout should be:
 
 ```
-.
-├── (this repository)
+.                         (this repository)
+├── run_all.py
+├── core/ cross_check/ baselines/ ...
 └── ml-100k/
     └── u.data, u.item, u.user, ...
 ```
 
-The repository's filtering protocol selects the top 497 users by rating count, then keeps items with at least 20 ratings within that user subset, producing exactly 497 x 903 x 79,432 ratings. This is enforced by `assert` statements in every loader.
+`u.data` is used by every stream, `u.item` (genres) and `u.user` (ages) by PF and GIM. The three eval scripts and `run_all.py` all look for `ml-100k/` in the repository root.
+
+The filtering protocol selects the top 497 users by rating count in the full table, then keeps items with at least 20 ratings within that user subset. The loaders assert 497 users, 903 items and 79,432 ratings (`core/code/fus.py`, `cross_check/code/fus.py`, `baselines/code/pf.py`, which `gim.py` reuses). Note that this order (users first, items second) is the one that produces those counts; the paper's wording lists the item filter first. The assertions have not been executed in the latest check because the dataset was not available there, so the counts are as recorded by the original authors.
 
 ## Reproduce the paper
 
 ```bash
-# from the repository root:
-python run_all.py            # runs cross_check, then baselines, then core; about 15 min total
-python run_all.py --tests    # runs the 12-test sanity suite
+# from the repository root, after downloading the data:
+python run_all.py            # runs cross_check, then baselines, then core
+python run_all.py --tests    # tests only, see below
 ```
+
+- `python run_all.py` **regenerates and overwrites** the committed result CSVs (and, for the core stream, the four faithful-FUS figures in `core/results/figs/`). The core stream does not recompute FUS: it copies `cross_check/results/protocol_A/results_FUS_A_warm.csv` to `core/results/results_FUS_A_warm.csv` and recomputes only CF. Because of the audit changes recorded in the CHANGELOG, re-running will change the CF numbers slightly relative to the committed CF CSV, which predates the removal of prediction clipping.
+- `python run_all.py --tests` runs `pytest tests/` and nothing else. It reads the committed result CSVs and runs two small data-free checks; it needs no dataset, regenerates no output, and ignores `--only` and `--skip`.
+- Run time: the original authors reported roughly 15 minutes end to end (5 to 6 minutes per stream). That was measured before the FUS k sweep was expanded from 10 to 26 values and has not been re-measured.
 
 Or with GNU Make:
 
@@ -121,7 +140,7 @@ Or with GNU Make:
 make data        # download MovieLens 100k
 make all         # run all three streams
 make tests       # run the test suite
-make figs        # regenerate the four paper-style figures
+make figs        # rerun core/code/eval.py (CF sweep plus the four figures)
 ```
 
 To run a single stream:
@@ -134,46 +153,54 @@ python run_all.py --only baselines
 
 ## Results
 
-### Headline comparison at k=10, alpha=0 (Protocol A, mean over 10 folds)
+### Headline comparison at k=10, alpha=0
 
-| System | MAE_users (ours) | MAE_users (paper) | CR (ours) | CR (paper) |
+See [Headline result](#headline-result) above.
+
+### FUS replication detail (alpha=0, mean over 10 folds)
+
+MAE and RMSE are in rating points, lower is better; CR is higher-is-better. "Faithful" is the committed run in `cross_check/results/protocol_A/` (identical copy in `core/results/`), predictions not clipped and no post-processing. "Floor/round" is the historical diagnostic run in `core/past_tests/results/` described under [Replication notes](#replication-notes). Paper values are the numbers the paper's text states.
+
+| k | metric | ours (faithful) | ours (floor/round) | paper |
 |---|---|---|---|---|
-| FUS  | 0.7728 | ~0.74  | 0.9796 | ~0.99 |
-| CF   | 0.7809 | not reported | 0.9299 | not reported |
-| GIM  | 0.8170 | ~0.85  | 0.9072 | ~0.92 |
-| PF   | 0.8447 | ~0.88  | 0.9191 | ~0.92 |
+| 1  | MAE_data  | 0.8843 | 0.9429 | 0.985 |
+| 1  | MAE_users | 0.9008 | 0.8472 | 0.857 |
+| 1  | RMSE      | 1.1590 | 1.2607 | 1.316 |
+| 1  | CR        | 0.6007 | 0.6007 | slightly below 0.60 |
+| 50 | MAE_data  | 0.7333 | 0.8174 | 0.83 |
+| 50 | MAE_users | 0.7415 | 0.7025 | 0.703 |
+| 50 | RMSE      | 0.9383 | 1.0779 | 1.107 |
+| 50 | CR        | 0.9997 | 0.9997 | around 0.99 |
 
-The relative ordering FUS > CF > GIM > PF on both MAE and CR exactly reproduces the paper's headline finding. Coverage Rate matches the paper within 1.4 percent on every system.
+Difference from the paper: faithful MAE_data -10.2% and -11.6%, RMSE -11.9% and -15.2%, MAE_users +5.1% and +5.5% (k=1 and k=50). Floor/round MAE_data -4.3% and -1.5%, MAE_users -1.1% and -0.1%, RMSE -4.2% and -2.6%. The k=50 MAE_users value is 0.7025 (mean 0.70254), which agrees with the paper's 0.703 at the three decimals the paper reports; it is not a match to four decimals, and it comes from the floor/round run, not the faithful one.
 
-### FUS replication detail
-
-| k | metric | ours (faithful) | ours (with floor/round) | paper |
-|---|---|---|---|---|
-| 1  | MAE_data  | 0.857 | 0.943 | 0.985 |
-| 1  | MAE_users | 0.869 | 0.847 | 0.857 |
-| 1  | RMSE      | 1.138 | 1.261 | 1.316 |
-| 1  | CR        | 0.6007 | 0.6007 | ~0.59 (matches) |
-| 50 | MAE_data  | 0.732 | 0.817 | 0.830 |
-| 50 | MAE_users | 0.740 | **0.7025** | **0.703** (matches to 4 dp) |
-| 50 | RMSE      | 0.937 | 1.078 | 1.107 |
-| 50 | CR        | 0.9997 | 0.9997 | ~0.99 (matches) |
-
-Under floor-and-round post-processing on predictions, every metric at k=50 lands within 3 percent of the paper, and MAE_users matches to four decimal places. At k=1, MAE_data and RMSE remain about 4 percent off. See [Replication notes](#replication-notes).
+The committed figures in `core/results/figs/` (Figs. 2 to 5 style) were regenerated from the faithful CSV with the plotting functions in `core/code/eval.py` and are titled "FUS faithful". The earlier set, drawn from the floor/round run (10 k values, annotated with the paper's values), is kept in `core/past_tests/results/figs/`.
 
 ## Replication notes
 
-The faithful FUS implementation produces error metrics 12 to 16 percent lower than the paper reports. CR matches the paper exactly at every k, confirming the algorithm itself is correctly implemented. Across this work we tested 51 hypotheses to identify the cause of the dataset-level metric gap; the only configuration that brings the numbers within 3 percent of the paper applies `floor()` to predictions before computing MAE_data and RMSE, and `round()` before computing MAE_users and RMSE_users. This is an undocumented post-processing step in the original paper.
+There are two separate post-processing protocols and they should not be mixed:
 
-Independent reproductions of PF (Hao 2016) and GIM (Al-Shamri 2008) also undershoot D'Aniello's claimed values by similar margins (about 4 percent on MAE_users), suggesting the gap is an evaluation-pipeline artefact rather than an implementation issue on our side.
+1. **Faithful (the repository's primary result).** Prediction is paper Eq. 19 with the exclusion rule, no clipping to [1, 5] (changed in v1.1.0, see CHANGELOG) and no rounding. Errors are computed on the real-valued predictions. MAE_data and RMSE average over the predictions actually made, so missing predictions are not counted as errors; they are reported through CR.
+2. **Floor/round (a diagnostic hypothesis).** Dataset-level metrics (MAE_data, RMSE) use `floor(prediction)` and user-level metrics (MAE_users, RMSE_users) use `round(prediction)`; CR is unchanged. This is not described in the paper; it is the best fit found by trial, in `cross_check/past_tests/` and `core/past_tests/`. The committed floor/round CSV was produced on 2026-05-09, before the v1.1.0 audit: it covers 10 k values (400 rows, not the audit's 26), and the script that made it (`cross_check/past_tests/code/eval_warm_paper_curve_approx.py`) clips predictions to [1, 5] before and after the floor/round step. It has not been regenerated.
 
-The full investigation log lives in `cross_check/REPRO_DEBUG_NOTES.md` and the per-batch hypothesis test scripts in each stream's `past_tests/` folder.
+Against the paper, the faithful implementation gives lower MAE_data and RMSE (10 to 15 percent) but higher MAE_users (about 5 percent), while coverage is close. Under floor/round all k=50 metrics are within 3 percent of the paper, but at k=1 MAE_data and RMSE are still about 4 percent low. That is an empirical fit to figures and text, not an exact match and not evidence that the paper used this procedure. With the same post-processing PF and GIM overshoot the paper (see `baselines/past_tests/README.md`).
+
+The error-metric gaps do not all point the same way, so a single "evaluation artefact" explanation is not established. Using the paper's Fig. 6 values at k=10 (read by eye), this replication's MAE_users is higher than the paper's for FUS (+5.4%) and lower for GIM (-1.4%), PF (-7.2%) and CF (-16%).
+
+Convention differences between streams, relevant when comparing systems:
+
+- `core/` FUS and CF: no clipping in the code now. The committed CF CSV was produced earlier, when this function clipped to [1, 5].
+- `baselines/` PF and GIM: predictions are still clipped to [1, 5] (`baselines/code/pf.py`, `baselines/code/gim.py`). Contract Section 4.1 says no clipping; the baselines and the committed CF results were not re-run after that change.
+- The sanity test for FUS at k=50 uses an upper limit of 0.793 for MAE_users, wider than the 0.723 in contract Section 10; the faithful value 0.7415 is outside the Section 10 band.
+
+The investigation log lives in `cross_check/REPRO_DEBUG_NOTES.md` and the per-batch hypothesis scripts in each stream's `past_tests/` folder.
 
 ## Reproducibility
 
-- Random seed: `KFold(n_splits=10, shuffle=True, random_state=42)` is used identically by all three streams. See `shared_contract.md` Section 3.
-- Hardware: verified on Python 3.14 and Windows 11 with 16 GB RAM, no GPU. Wall-clock time: each stream finishes in 5 to 6 minutes; end-to-end `run_all.py` finishes in about 15 minutes.
-- Tests: `python run_all.py --tests` runs 12 sanity assertions on the produced CSVs (CR-at-k=1 approximately 0.60, sanity-band checks, cross-implementation consistency check, system-ordering check). All 12 pass on the committed result CSVs.
-- Software environment: pinned dependencies in `requirements.txt` and `environment.yml`. Pure NumPy, pandas, scikit-learn. No GPU, no PyTorch, no exotic libraries.
+- Splits: `KFold(n_splits=10, shuffle=True, random_state=42)` is used by all three streams (`core/code/eval.py`, `cross_check/code/eval_fus.py`, `baselines/code/eval.py`), applied to the filtered ratings in `u.data` order, so the fold indices are the same given the same filtered rows. See `shared_contract.md` Section 3. That all three loaders select exactly the same rows has not been executed in the latest check (it needs the dataset); core and cross_check use `value_counts().nlargest(497)` and baselines use `groupby().size().sort_values().head(497)`, which could differ only if two users tie at the 497th rating count.
+- Hardware: the authors report Python 3.14 on Windows 11 with 16 GB RAM, no GPU. This was not re-measured.
+- Tests: `python run_all.py --tests` (pytest) checks the committed CSVs (columns, CR at k=1 about 0.60, CR monotone in k, sanity bands, system ordering at k=10) and two data-free checks: that each script's data path points to `<repo>/ml-100k`, and that the core and cross_check FUS code give the same predictions on a small synthetic fixture. These tests do not recompute any committed result. The core and cross_check FUS CSVs are byte-identical because the core stream copies the cross_check file, so agreement between those two CSVs is by construction. The two FUS modules are structurally close, so the synthetic check is a consistency check rather than an independent derivation.
+- Software: no GPU, no PyTorch. The scientific stack is NumPy, pandas, SciPy, scikit-learn and matplotlib.
 
 ## Citation
 
