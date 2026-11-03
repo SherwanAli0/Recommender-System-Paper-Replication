@@ -19,7 +19,9 @@ authors:
     given-names: Yasmine
     affiliation: "Uskudar University"
     alias: Dandyyass
-license: MIT
+license:
+  - MIT
+  - CC-BY-4.0
 date-released: 2026-05-08
 keywords:
   - recommender systems
