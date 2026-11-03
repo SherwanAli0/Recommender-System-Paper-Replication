@@ -63,4 +63,4 @@ cd code
 python eval_fus.py
 ```
 
-The dataset must be in `ml-100k/` in the repository root. The authors reported about 4 to 6 minutes on a modern laptop; that was measured before the sweep grew from 10 to 26 k values and has not been re-measured. Output appears in `results/protocol_A/results_FUS_A_warm.csv` and overwrites the committed file.
+The dataset must be in `ml-100k/` in the repository root. It took about 18 minutes when measured (Windows 11, 12 logical cores, shared with other processes); the authors' earlier 4 to 6 minutes predates the growth of the sweep from 10 to 26 k values. Output appears in `results/protocol_A/results_FUS_A_warm.csv` and overwrites the committed file.

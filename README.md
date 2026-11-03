@@ -81,9 +81,9 @@ The `core` and `cross_check` folders hold two FUS implementations (written by di
 ## Requirements
 
 - Python 3.10 to 3.13 is the documented range. CI runs the tests on 3.10, 3.11 and 3.12; the authors report running the evaluation on 3.14.
-- `numpy`, `pandas`, `scipy`, `scikit-learn`, `matplotlib` (version ranges in `requirements.txt`).
+- `numpy`, `pandas`, `scipy`, `scikit-learn`, `matplotlib` (version ranges in `requirements.txt`), and `deap` for GIM's genetic algorithm in the baselines stream (it was missing from the requirements before and made `run_all.py` fail at the GIM step).
 - Optional: `pytest` for the test suite.
-- Last checked: the sanity tests were run on Python 3.11.9 with numpy 2.4.6, pandas 2.3.3, scipy 1.17.1, scikit-learn 1.9.1, matplotlib 3.11.2 and pytest 9.2.0. The full evaluation (which needs the dataset) was not re-run in that check.
+- Last checked: Python 3.11.9 with numpy 2.4.6, pandas 2.3.3, scipy 1.17.1, scikit-learn 1.9.1, matplotlib 3.11.2, deap 1.4.4 and pytest 9.2.0 on Windows 11. Both the sanity tests and the full reproduction (all three streams) were run with these versions; see [Latest full rerun](#latest-full-rerun).
 
 ```bash
 pip install -r requirements.txt
@@ -120,7 +120,7 @@ After unzipping, the layout should be:
 
 `u.data` is used by every stream, `u.item` (genres) and `u.user` (ages) by PF and GIM. The three eval scripts and `run_all.py` all look for `ml-100k/` in the repository root.
 
-The filtering protocol selects the top 497 users by rating count in the full table, then keeps items with at least 20 ratings within that user subset. The loaders assert 497 users, 903 items and 79,432 ratings (`core/code/fus.py`, `cross_check/code/fus.py`, `baselines/code/pf.py`, which `gim.py` reuses). Note that this order (users first, items second) is the one that produces those counts; the paper's wording lists the item filter first. The assertions have not been executed in the latest check because the dataset was not available there, so the counts are as recorded by the original authors.
+The filtering protocol selects the top 497 users by rating count in the full table, then keeps items with at least 20 ratings within that user subset. The loaders assert 497 users, 903 items and 79,432 ratings (`core/code/fus.py`, `cross_check/code/fus.py`, `baselines/code/pf.py`, which `gim.py` reuses). Note that this order (users first, items second) is the one that produces those counts; the paper's wording lists the item filter first. The latest check ran all of these loaders on the real data and they give exactly 497 users, 903 items and 79,432 ratings (see [Latest full rerun](#latest-full-rerun)).
 
 ## Reproduce the paper
 
@@ -132,7 +132,7 @@ python run_all.py --tests    # tests only, see below
 
 - `python run_all.py` **regenerates and overwrites** the committed result CSVs (and, for the core stream, the four faithful-FUS figures in `core/results/figs/`). The core stream does not recompute FUS: it copies `cross_check/results/protocol_A/results_FUS_A_warm.csv` to `core/results/results_FUS_A_warm.csv` and recomputes only CF. Because of the audit changes recorded in the CHANGELOG, re-running will change the CF numbers slightly relative to the committed CF CSV, which predates the removal of prediction clipping.
 - `python run_all.py --tests` runs `pytest tests/` and nothing else. It reads the committed result CSVs and runs two small data-free checks; it needs no dataset, regenerates no output, and ignores `--only` and `--skip`.
-- Run time: the original authors reported roughly 15 minutes end to end (5 to 6 minutes per stream). That was measured before the FUS k sweep was expanded from 10 to 26 values and has not been re-measured.
+- Run time: measured on Windows 11 (12 logical cores, other processes running): cross_check about 18 minutes, baselines about 8 minutes, core under 1 minute, about 27 minutes in total. The authors' earlier figure of 15 minutes end to end predates the expansion of the FUS k sweep from 10 to 26 values.
 
 Or with GNU Make:
 
@@ -197,10 +197,24 @@ The investigation log lives in `cross_check/REPRO_DEBUG_NOTES.md` and the per-ba
 
 ## Reproducibility
 
-- Splits: `KFold(n_splits=10, shuffle=True, random_state=42)` is used by all three streams (`core/code/eval.py`, `cross_check/code/eval_fus.py`, `baselines/code/eval.py`), applied to the filtered ratings in `u.data` order, so the fold indices are the same given the same filtered rows. See `shared_contract.md` Section 3. That all three loaders select exactly the same rows has not been executed in the latest check (it needs the dataset); core and cross_check use `value_counts().nlargest(497)` and baselines use `groupby().size().sort_values().head(497)`, which could differ only if two users tie at the 497th rating count.
-- Hardware: the authors report Python 3.14 on Windows 11 with 16 GB RAM, no GPU. This was not re-measured.
+- Splits: `KFold(n_splits=10, shuffle=True, random_state=42)` is used by all three streams (`core/code/eval.py`, `cross_check/code/eval_fus.py`, `baselines/code/eval.py`), applied to the filtered ratings in `u.data` order, so the fold indices are the same given the same filtered rows. See `shared_contract.md` Section 3. The core, cross_check and baselines (PF and GIM) loaders were checked to return identical rows in identical order, and the folds from `KFold` on a list of triples and on `np.arange(n)` are identical. Core and cross_check use `value_counts().nlargest(497)` and baselines use `groupby().size().sort_values().head(497)`, which could differ only on a tie at the 497th rating count; there is none (the 497th user has 60 ratings and the 498th has 59).
+- Hardware: no GPU is needed. The authors report Python 3.14 on Windows 11 with 16 GB RAM; Python 3.14 was not re-checked.
 - Tests: `python run_all.py --tests` (pytest) checks the committed CSVs (columns, CR at k=1 about 0.60, CR monotone in k, sanity bands, system ordering at k=10) and two data-free checks: that each script's data path points to `<repo>/ml-100k`, and that the core and cross_check FUS code give the same predictions on a small synthetic fixture. These tests do not recompute any committed result. The core and cross_check FUS CSVs are byte-identical because the core stream copies the cross_check file, so agreement between those two CSVs is by construction. The two FUS modules are structurally close, so the synthetic check is a consistency check rather than an independent derivation.
 - Software: no GPU, no PyTorch. The scientific stack is NumPy, pandas, SciPy, scikit-learn and matplotlib.
+
+### Latest full rerun
+
+All three streams were run with `python run_all.py` (baselines with `deap` installed and UTF-8 output) in a scratch copy of the repository, so the committed CSVs and figures were not overwritten, on the MovieLens 100k files from GroupLens (zip checksum checked against the published MD5). Versions are listed under [Requirements](#requirements). Summary of rerun versus committed results:
+
+| Result | Rerun versus committed |
+|---|---|
+| Loaders (core, cross_check, baselines PF and GIM) | 497 users, 903 items, 79,432 ratings in all four; identical rows and order |
+| FUS (cross_check, 1040 rows; core is a copy) | alpha=0 per-fold values within 0.0006 (the committed file is rounded to 4 decimals, the script writes full precision). alpha 0.7 to 0.9: per-fold values differ by up to 0.010 and CR by up to 0.006, fold means over all (alpha, k) by at most 0.0012. The neighbor sort is sensitive to tie order (on fold 0, alpha=0.8, k=1 MAE_users was 0.8972 with the default sort, 0.8933 with a stable sort and 0.8896 committed). Headline alpha=0 means at k=1, 10, 50 agree to 4 decimals except k=1 MAE_users 0.9007 versus 0.9008. |
+| CF (core) | CR identical. MAE and RMSE higher in the rerun (k=10 MAE_users 0.7933 versus 0.7809, per-fold differences up to 0.047). The committed CF file is reproduced exactly (difference 0.0 on all 10 folds at k=1, 10, 50) when predictions are clipped to [1, 5], so it is the pre-audit clipped run. |
+| PF (baselines) | Not reproduced: k=10 MAE_users 0.8563 versus 0.8447 and CR 0.8976 versus 0.9191 committed. The rerun equals the committed theta=0.3 row of `baselines/past_tests/results/repro_pf_theta_sweep.csv` exactly, so the committed `results_PF_A_warm.csv` does not come from the current code, nor from the theta 0.3, 0.4 or 0.5 raw variants recorded there (the only ones compared). |
+| GIM (baselines) | k=10 MAE_users 0.8229 versus 0.8170, CR 0.9035 versus 0.9072. The genetic algorithm is not deterministic: two fits of fold 0 gave MAE_users 0.8243 and 0.8242 and CR 0.9047 and 0.9031 (DEAP's tournament selection uses an unseeded random generator). |
+
+Committed results were not replaced. With the rerun values the k=10 MAE_users order is FUS 0.7788, CF 0.7933, GIM 0.8229, PF 0.8563 and the CR order is FUS 0.9796, CF 0.9299, GIM 0.9035, PF 0.8976, so the committed headline table (Headline result above) differs from a fresh run for CF, PF and GIM. The open questions about re-running with or without clipping and about seeding the GA are with the repository owner.
 
 ## Citation
 

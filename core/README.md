@@ -43,7 +43,7 @@ df = df[df["item_id"].isin(valid_items)]
 # asserted in the loader: 497 users, 903 items, 79,432 ratings
 ```
 
-How ties at the 497th user are broken is whatever pandas does for `value_counts().nlargest`; it is not specified by user ID.
+Ties at the 497th user are not an issue on this dataset: the 497th user has 60 ratings and the 498th has 59. (Which user wins a tie would otherwise be whatever pandas does for `value_counts().nlargest`, not a rule by user ID.)
 
 ### Fuzzy User Signature (Eqs 1 to 19)
 
@@ -141,7 +141,7 @@ This will:
 
 1. Check that `../../cross_check/results/protocol_A/results_FUS_A_warm.csv` exists (exit code 1 if it does not) and copy it to `results/results_FUS_A_warm.csv`.
 2. Load and filter the MovieLens dataset.
-3. Run the CF sweep (10 folds x 10 k values; the original authors reported about 10 minutes, not re-measured).
+3. Run the CF sweep (10 folds x 10 k values; the whole script took about 50 seconds when measured).
 4. Overwrite the four figures in `results/figs/` from the faithful FUS CSV.
 
 ### Output CSVs

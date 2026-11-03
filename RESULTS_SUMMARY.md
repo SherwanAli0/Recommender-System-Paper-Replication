@@ -17,7 +17,7 @@ The README has the same tables with more context. Numbers here are recomputed fr
 | Validation | 10-fold cross-validation, `random_state=42` |
 | Protocol | Protocol A (alpha = 0 for the headline table), warm-start |
 
-The counts are enforced by `assert` statements in the loaders. The dataset is not part of the repository.
+The counts are enforced by `assert` statements in the loaders and were confirmed on the real data in the latest rerun (see the README section "Latest full rerun", which also lists where a fresh run differs from the committed CSVs). The dataset is not part of the repository.
 
 ---
 
