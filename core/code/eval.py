@@ -38,9 +38,9 @@ import cf as cf_mod
 # PATHS
 # -----------------------------------------------------------------------------
 _HERE        = os.path.dirname(os.path.abspath(__file__))
-# ml-100k lives at the repo root, three levels up from this file
-# (Implementation/core/code/ → ../../../ml-100k)
-DATA_DIR     = os.path.join(_HERE, "..", "..", "..", "ml-100k")
+# ml-100k lives at the repository root, two levels up from this file
+# (core/code/ -> ../../ml-100k), as documented in README.md and the Makefile.
+DATA_DIR     = os.path.join(_HERE, "..", "..", "ml-100k")
 RESULTS_DIR  = os.path.join(_HERE, "..", "results")
 FIGS_DIR     = os.path.join(RESULTS_DIR, "figs")
 RATINGS_PATH = os.path.join(DATA_DIR, "u.data")
@@ -57,9 +57,11 @@ os.makedirs(FIGS_DIR, exist_ok=True)
 # -----------------------------------------------------------------------------
 # SWEEP PARAMETERS - shared_contract.md §6
 # -----------------------------------------------------------------------------
-# Paper V.C.2: "k = {1, 2, 4, 6, 8, 10, ..., 48, 50}" -- 26 values.
-K_VALUES     = [1, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28,
-                30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50]
+# This script only runs the CF sweep (FUS is copied from cross_check, which uses
+# the paper's 26-value FUS sweep, see cross_check/code/eval_fus.py). CF is a
+# reference baseline, so it uses the baseline sweep of shared_contract.md Section 6;
+# this is also the k set of the committed core/results/results_CF_A_warm.csv.
+K_VALUES     = [1, 2, 4, 6, 8, 10, 15, 20, 30, 50]
 ALPHA_VALUES = [0.0, 0.7, 0.8, 0.9]
 ALPHA_COLORS = {0.0: "#1f77b4", 0.7: "#ff7f0e", 0.8: "#2ca02c", 0.9: "#d62728"}
 
@@ -160,7 +162,7 @@ def plot_fig2(fus_df, out_path):
     ax.set_xticks(list(xs))
     ax.set_xticklabels(["k=" + str(k) for k in grp["k"]])
     ax.set_ylabel("MAE_data")
-    ax.set_title("Fig 2 - MAE per fold (FUS, alpha=0)")
+    ax.set_title("Fig 2 - MAE per fold (FUS faithful, alpha=0)")
     ax.set_ylim(0, (grp["mean"] + grp["std"]).max() * 1.25)
     plt.tight_layout()
     plt.savefig(out_path, dpi=150)
@@ -182,7 +184,7 @@ def plot_fig3(fus_df, out_path):
     for ax, title in zip(axes, ["MAE_data", "MAE_users"]):
         ax.set_xlabel("k")
         ax.set_ylabel(title)
-        ax.set_title("Fig 3 - " + title + " vs k (FUS)")
+        ax.set_title("Fig 3 - " + title + " vs k (FUS faithful)")
         ax.legend(fontsize=8)
         ax.grid(True, alpha=0.3)
     plt.tight_layout()
@@ -205,7 +207,7 @@ def plot_fig4(fus_df, out_path):
     for ax, title in zip(axes, ["RMSE", "RMSE_users"]):
         ax.set_xlabel("k")
         ax.set_ylabel(title)
-        ax.set_title("Fig 4 - " + title + " vs k (FUS)")
+        ax.set_title("Fig 4 - " + title + " vs k (FUS faithful)")
         ax.legend(fontsize=8)
         ax.grid(True, alpha=0.3)
     plt.tight_layout()
@@ -225,7 +227,7 @@ def plot_fig5(fus_df, out_path):
                 color=ALPHA_COLORS[alpha], label="alpha=" + str(alpha))
     ax.set_xlabel("k")
     ax.set_ylabel("CR (Coverage Rate)")
-    ax.set_title("Fig 5 - CR vs k (FUS)")
+    ax.set_title("Fig 5 - CR vs k (FUS faithful)")
     ax.legend(fontsize=8)
     ax.set_ylim(0, 1.05)
     ax.grid(True, alpha=0.3)
@@ -251,7 +253,7 @@ def main():
         print("ERROR: the cross-check implementation FUS CSV not found at:")
         print("  " + P2_FUS_CSV)
         print("Run cross_check/code/eval_fus.py first.")
-        return
+        sys.exit(1)
     shutil.copy2(P2_FUS_CSV, p1_fus_csv)
     print("Copied FUS CSV from the cross-check implementation ->")
     print("  " + p1_fus_csv)

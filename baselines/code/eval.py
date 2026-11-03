@@ -36,8 +36,9 @@ sys.path.insert(0, HERE)
 from pf import ProbabilisticFiltering, load_and_filter as pf_load  # noqa: E402
 from gim import FuzzyGeneticMethod, load_and_filter as gim_load  # noqa: E402
 
-# ml-100k lives at the repo root, three levels up from this file
-DATA_DIR = os.path.join(HERE, "..", "..", "..", "ml-100k")
+# ml-100k lives at the repository root, two levels up from this file
+# (baselines/code/ -> ../../ml-100k)
+DATA_DIR = os.path.join(HERE, "..", "..", "ml-100k")
 RESULTS_DIR = os.path.join(HERE, "..", "results")
 os.makedirs(RESULTS_DIR, exist_ok=True)
 
