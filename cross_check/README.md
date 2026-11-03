@@ -8,15 +8,15 @@ The two FUS modules are written as separate files (see [CONTRIBUTORS.md](../CONT
 
 ```
 cross_check/
-├── README.md                                 this file
-├── REPRO_DEBUG_NOTES.md                      full replication investigation log
-├── code/
-│   ├── fus.py                                Eqs 1 to 19, paper-faithful
-│   └── eval_fus.py                           Protocol A runner
-├── past_tests/                               hypothesis tests + literature search
-└── results/
-    └── protocol_A/
-        └── results_FUS_A_warm.csv            10 folds x 26 k x 4 alpha = 1040 rows
++-- README.md                                 this file
++-- REPRO_DEBUG_NOTES.md                      full replication investigation log
++-- code/
+|   +-- fus.py                                Eqs 1 to 19, paper-faithful
+|   +-- eval_fus.py                           Protocol A runner
++-- past_tests/                               hypothesis tests + literature search
++-- results/
+    +-- protocol_A/
+        +-- results_FUS_A_warm.csv            10 folds x 26 k x 4 alpha = 1040 rows
 ```
 
 ## What this implementation produces

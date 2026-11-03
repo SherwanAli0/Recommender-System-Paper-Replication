@@ -13,18 +13,18 @@ Both are evaluated under the same 10-fold protocol as the FUS implementation in 
 
 ```
 baselines/
-├── README.md                              this file
-├── code/
-│   ├── pf.py                              PF, Hao 2016
-│   ├── gim.py                             GIM, Al-Shamri & Bharadwaj 2008
-│   ├── eval.py                            10-fold CV, sweep, metrics, CSV writers
-│   └── test_baselines.py                  unit tests for filter shape (needs the dataset) and PF neighbourhood
-├── papers/
-│   └── hao2016_9535808_pf.pdf             source paper for PF
-├── past_tests/                            theta sweep + post-processing hypothesis tests
-└── results/
-    ├── results_PF_A_warm.csv
-    └── results_GIM_A_warm.csv
++-- README.md                              this file
++-- code/
+|   +-- pf.py                              PF, Hao 2016
+|   +-- gim.py                             GIM, Al-Shamri & Bharadwaj 2008
+|   +-- eval.py                            10-fold CV, sweep, metrics, CSV writers
+|   +-- test_baselines.py                  unit tests for filter shape (needs the dataset) and PF neighbourhood
++-- papers/
+|   +-- hao2016_9535808_pf.pdf             source paper for PF
++-- past_tests/                            theta sweep + post-processing hypothesis tests
++-- results/
+    +-- results_PF_A_warm.csv
+    +-- results_GIM_A_warm.csv
 ```
 
 ## Success criteria

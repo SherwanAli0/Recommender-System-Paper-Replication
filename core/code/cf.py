@@ -21,7 +21,7 @@ import numpy as np
 import pandas as pd
 
 
-# ─────────────────────────────────────────────────────────────────────────────
+#
 # PEARSON SIMILARITY MATRIX
 #
 # Source: Pearson correlation formula adapted from
@@ -35,7 +35,7 @@ import pandas as pd
 # where norm_i = sqrt( Σ_{m ∈ I_i} (r_im - r̄_i)² ).
 # Unrated cells are 0 in R_c, so the dot-product naturally sums only over
 # co-rated items - no explicit co-rated-item mask needed.
-# ─────────────────────────────────────────────────────────────────────────────
+#
 def compute_pearson_sim_matrix(train_df, users, user_to_idx,
                                 item_to_idx, n_items, user_means):
     """

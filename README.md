@@ -45,35 +45,35 @@ Per-contribution roles are listed in [CONTRIBUTORS.md](CONTRIBUTORS.md). Univers
 
 ```
 .
-├── README.md
-├── LICENSE                 dual MIT (code) + CC-BY 4.0 (text)
-├── CITATION.cff
-├── CONTRIBUTORS.md         CRediT-style role attribution
-├── requirements.txt
-├── environment.yml
-├── Makefile
-├── run_all.py              cross-platform single-command reproduction
-├── shared_contract.md      binding interface for all three streams
-├── A_Recommendation_System_Based_on_Fuzzy_Signature.pdf
-│
-├── core/                   FUS implementation + CF baseline (paper Eqs 1 to 19)
-│   ├── code/               fus.py, cf.py, eval.py
-│   ├── past_tests/         diagnostic experiments, floor/round approximation, its figures
-│   └── results/            results_FUS_A_warm.csv, results_CF_A_warm.csv, figs/
-│
-├── cross_check/            second FUS implementation (also produces the FUS CSV)
-│   ├── code/               fus.py, eval_fus.py
-│   ├── past_tests/         replication investigation (hypothesis scripts and CSVs)
-│   └── results/            results_FUS_A_warm.csv (protocol A)
-│
-├── baselines/              PF (Hao 2016) + GIM (Al-Shamri 2008) reference baselines
-│   ├── code/               pf.py, gim.py, eval.py, test_baselines.py
-│   ├── papers/             Hao 2016 PDF
-│   ├── past_tests/         theta sweep + post-processing hypothesis tests
-│   └── results/            results_PF_A_warm.csv, results_GIM_A_warm.csv
-│
-└── tests/                  sanity checks on committed CSVs plus data-free regression checks
-    └── test_sanity.py
++-- README.md
++-- LICENSE                 dual MIT (code) + CC-BY 4.0 (text)
++-- CITATION.cff
++-- CONTRIBUTORS.md         CRediT-style role attribution
++-- requirements.txt
++-- environment.yml
++-- Makefile
++-- run_all.py              cross-platform single-command reproduction
++-- shared_contract.md      binding interface for all three streams
++-- A_Recommendation_System_Based_on_Fuzzy_Signature.pdf
+|
++-- core/                   FUS implementation + CF baseline (paper Eqs 1 to 19)
+|   +-- code/               fus.py, cf.py, eval.py
+|   +-- past_tests/         diagnostic experiments, floor/round approximation, its figures
+|   +-- results/            results_FUS_A_warm.csv, results_CF_A_warm.csv, figs/
+|
++-- cross_check/            second FUS implementation (also produces the FUS CSV)
+|   +-- code/               fus.py, eval_fus.py
+|   +-- past_tests/         replication investigation (hypothesis scripts and CSVs)
+|   +-- results/            results_FUS_A_warm.csv (protocol A)
+|
++-- baselines/              PF (Hao 2016) + GIM (Al-Shamri 2008) reference baselines
+|   +-- code/               pf.py, gim.py, eval.py, test_baselines.py
+|   +-- papers/             Hao 2016 PDF
+|   +-- past_tests/         theta sweep + post-processing hypothesis tests
+|   +-- results/            results_PF_A_warm.csv, results_GIM_A_warm.csv
+|
++-- tests/                  sanity checks on committed CSVs plus data-free regression checks
+    +-- test_sanity.py
 ```
 
 The `core` and `cross_check` folders hold two FUS implementations (written by different contributors, see [CONTRIBUTORS.md](CONTRIBUTORS.md)). They are structurally close, and the core stream reuses the cross_check FUS results instead of recomputing them, so agreement between them is a consistency check, not an independent derivation. See [Reproducibility](#reproducibility).
@@ -112,10 +112,10 @@ After unzipping, the layout should be:
 
 ```
 .                         (this repository)
-├── run_all.py
-├── core/ cross_check/ baselines/ ...
-└── ml-100k/
-    └── u.data, u.item, u.user, ...
++-- run_all.py
++-- core/ cross_check/ baselines/ ...
++-- ml-100k/
+    +-- u.data, u.item, u.user, ...
 ```
 
 `u.data` is used by every stream, `u.item` (genres) and `u.user` (ages) by PF and GIM. The three eval scripts and `run_all.py` all look for `ml-100k/` in the repository root.

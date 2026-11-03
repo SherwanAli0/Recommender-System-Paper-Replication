@@ -8,12 +8,12 @@ This folder contains **diagnostic and exploratory** files that were used during 
 
 ```
 past_tests/
-├── README.md                              (this file)
-├── code/
-│   └── regenerate_plots_approx.py         (script that regenerates figs from paper-curve-approx data)
-└── results/
-    ├── results_FUS_A_warm_paper_curve_approx.csv  (FUS results with floor/round post-processing)
-    └── figs/                                      (fig2 to fig5 drawn from that CSV)
++-- README.md                              (this file)
++-- code/
+|   +-- regenerate_plots_approx.py         (script that regenerates figs from paper-curve-approx data)
++-- results/
+    +-- results_FUS_A_warm_paper_curve_approx.csv  (FUS results with floor/round post-processing)
+    +-- figs/                                      (fig2 to fig5 drawn from that CSV)
 ```
 
 ---
