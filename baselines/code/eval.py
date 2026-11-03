@@ -30,6 +30,11 @@ import numpy as np
 import pandas as pd
 from sklearn.model_selection import KFold
 
+# This script prints non-ASCII characters; make that safe when stdout is redirected
+# on Windows (default cp1252 codec), as run_all.py's subprocess output may be.
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 

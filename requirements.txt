@@ -7,3 +7,6 @@ pandas>=2.0,<3.0
 scipy>=1.10,<2.0
 scikit-learn>=1.3,<2.0
 matplotlib>=3.7,<4.0
+# GIM's genetic algorithm (baselines/code/gim.py, run by baselines/code/eval.py) imports DEAP.
+# Checked with deap 1.4.4.
+deap>=1.4,<2.0
