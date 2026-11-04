@@ -54,8 +54,18 @@ Copyright (c) 2026 Sherwan Ali, Ipek Ucar, Yaprak Sevinc Aldogan,
                    Yasmine Guidoum
 
 This work is licensed under the Creative Commons Attribution 4.0
-International License. To view a copy of this license, visit
-https://creativecommons.org/licenses/by/4.0/
+International License.
+
+Files covered by this Section B: all .md files, the results .csv files,
+the .png figures, and the replication-investigation notes in past_tests/,
+except for the paper PDF (Section D, which is not covered by either
+license).
+
+The full legal code of the license is in the file
+LICENSE-CC-BY-4.0.txt at the root of this repository (an unmodified
+copy of the official text). That file contains the complete terms and
+governs; the summary below is for convenience only. The license can
+also be viewed online at https://creativecommons.org/licenses/by/4.0/
 
 You are free to:
   - Share - copy and redistribute the material in any medium or format

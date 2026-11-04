@@ -47,6 +47,7 @@ Per-contribution roles are listed in [CONTRIBUTORS.md](CONTRIBUTORS.md). Univers
 .
 +-- README.md
 +-- LICENSE                 dual MIT (code) + CC-BY 4.0 (text)
++-- LICENSE-CC-BY-4.0.txt   full legal code of CC-BY 4.0 (verbatim official text)
 +-- CITATION.cff
 +-- CONTRIBUTORS.md         CRediT-style role attribution
 +-- requirements.txt
@@ -247,7 +248,7 @@ A `CITATION.cff` is provided so GitHub renders a "Cite this repository" button a
 This repository is dual-licensed:
 
 - Source code (Python files, Makefile, configs): [MIT License](LICENSE).
-- Documentation, results CSVs, figures, and research notes: [CC-BY 4.0](LICENSE).
+- Documentation, results CSVs, figures, and research notes: [CC-BY 4.0](LICENSE). The full legal code is included in [LICENSE-CC-BY-4.0.txt](LICENSE-CC-BY-4.0.txt).
 
 Under CC-BY 4.0, academic and research users are legally required to cite this work when using any portion of the documentation, results, or replication notes. See the [Citation](#citation) section above for the exact format. Citation is also expected when using only the code, even though the MIT license does not strictly enforce it.
 
